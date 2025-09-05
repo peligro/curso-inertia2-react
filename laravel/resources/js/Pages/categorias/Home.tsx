@@ -1,10 +1,12 @@
-import { Link, useForm, usePage } from "@inertiajs/react"
+import { Head, Link, useForm, usePage } from "@inertiajs/react"
 import { useState } from "react";
 import { Form, Modal } from "react-bootstrap";
 import MensajesFlash from "../../../js/componentes/MensajesFlash";
 import { CategoriaInterface, CategoriaProps } from "../../../js/Interfaces/CategoriaInterface";
 import { FormularioProps } from "../../../js/Interfaces/FormularioProps";
 import { route } from "ziggy-js"
+import { AlertCustomInterface } from "resources/js/Interfaces/AlertCustomInterface";
+import AlertCustom from "../../../js/componentes/AlertCustom";
 
 const Home = () => {
   const { datos } = usePage<CategoriaProps>().props;
@@ -13,42 +15,45 @@ const Home = () => {
   //formulario
   const { flash } = usePage().props as FormularioProps;
 
-  const { data, setData, post, put, delete:destroy, processing } = useForm({
+  const { data, setData, post, put, delete: destroy, processing } = useForm({
     nombre: ''
   });
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (data.nombre.trim() == "") {
-      alert("El campo nombre es obligatorio");
+      setAlertData({
+                estado: true,
+                titulo: "Alerta !!!",
+                detalle: "El campo nombre es obligatorio",
+                headerBg: "bg-danger"
+            });
       setData({
         nombre: ''
       });
       return false;
     }
-    if(acciones==1)
-    {
+    if (acciones == 1) {
       post(route('categorias_post'), {
-      onSuccess: () => {
-        setData({
-          nombre: ''
-        });
-      },
+        onSuccess: () => {
+          setData({
+            nombre: ''
+          });
+        },
 
-     });
+      });
     }
-    if(acciones==2)
-    {
+    if (acciones == 2) {
       //alert(route('categorias_put', {id:accionesId}));return false;
-      put(route('categorias_put', {id:accionesId}), {
-      onSuccess: () => {
-        setData({
-          nombre: ''
-        });
-      },
+      put(route('categorias_put', { id: accionesId }), {
+        onSuccess: () => {
+          setData({
+            nombre: ''
+          });
+        },
 
-     });
+      });
     }
-   
+
   }
   //ventana modal
   const [show, setShow] = useState(false);
@@ -63,7 +68,7 @@ const Home = () => {
     });
     handleShow();
   };
-  const handleEditar = (modulo:CategoriaInterface) => {
+  const handleEditar = (modulo: CategoriaInterface) => {
 
     setAcciones(2);
     setAccionesId(modulo.id);
@@ -73,14 +78,36 @@ const Home = () => {
     handleShow();
   };
   const handleEliminar = async (id: number) => {
-      
-      if(confirm("¿Realmente desea eliminar este registro?"))
-      {
-        destroy(route('categorias_delete', {id:id}));
-      }
-    };
+
+    if (confirm("¿Realmente desea eliminar este registro?")) {
+      destroy(route('categorias_delete', { id: id }));
+    }
+  };
+  //alertCustom
+  const [alertData, setAlertData] = useState<AlertCustomInterface>({
+    estado: false,
+    titulo: "",
+    detalle: "",
+    headerBg: "bg-primary" // Valor por defecto
+  });
+
+  const handleCloseModal = () => {
+    setAlertData(prev => ({
+      ...prev,
+      estado: false
+    }));
+
+  };
   return (
     <>
+    <Head title="Categorías" />
+    <AlertCustom
+                estado={alertData.estado}
+                titulo={alertData.titulo}
+                detalle={alertData.detalle}
+                onClose={handleCloseModal}
+                headerBg={alertData.headerBg} // Pasa el valor del estado
+            />
       <div className="row">
         <div className="col-12">
           <nav aria-label="breadcrumb">

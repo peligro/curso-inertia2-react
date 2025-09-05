@@ -9,6 +9,8 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LayoutController;
 use App\Http\Controllers\FormularioController;
 use App\Http\Controllers\CategoriasController;
+use App\Http\Controllers\PublicacionesController;
+
 
 Route::get('/', [HomeController::class, 'home_index'])->name('home_index');
 
@@ -26,6 +28,8 @@ Route::get('/categorias', [CategoriasController::class, 'categorias_index'])->na
 Route::post('/categorias', [CategoriasController::class, 'categorias_post'])->name('categorias_post');
 Route::put('/categorias/{id}', [CategoriasController::class, 'categorias_put'])->name('categorias_put');
 Route::delete('/categorias/{id}', [CategoriasController::class, 'categorias_delete'])->name('categorias_delete');
+
+Route::get('/publicaciones', [PublicacionesController::class, 'publicaciones_index'])->name('publicaciones_index');
 
 #método custom 404
 Route::any('{any}', function () {

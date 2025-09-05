@@ -52,6 +52,9 @@ const Layout = ({ children }: LayoutPropsInterface) => {
                 <li className="nav-item">
                   <Link className={`nav-link ${currentPath === '/categorias' ? 'active' : ''}`} aria-current="page" href={route('categorias_index')}>Categorías</Link>
                 </li>
+                <li className="nav-item">
+                  <Link className={`nav-link ${currentPath === '/publicaciones' ? 'active' : ''}`} aria-current="page" href={route('publicaciones_index')}>Publicaciones</Link>
+                </li>
               </ul>
             </div>
           </div>
