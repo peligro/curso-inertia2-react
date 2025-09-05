@@ -17,7 +17,7 @@ class FormularioController extends Controller
     public function formulario_post_post(Request $request)
     {
         //dd($request);
-         $validated =$request->validate([
+        $validated =$request->validate([
             'nombre' => 'required|min:5',
             'correo' => 'required|email',
             

@@ -23,6 +23,9 @@ Route::get('/formulario/post', [FormularioController::class, 'formulario_post'])
 Route::post('/formulario/post', [FormularioController::class, 'formulario_post_post'])->name('formulario_post_post');
 
 Route::get('/categorias', [CategoriasController::class, 'categorias_index'])->name('categorias_index');
+Route::post('/categorias', [CategoriasController::class, 'categorias_post'])->name('categorias_post');
+Route::put('/categorias/{id}', [CategoriasController::class, 'categorias_put'])->name('categorias_put');
+Route::delete('/categorias/{id}', [CategoriasController::class, 'categorias_delete'])->name('categorias_delete');
 
 #método custom 404
 Route::any('{any}', function () {
