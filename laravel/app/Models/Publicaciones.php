@@ -9,7 +9,7 @@ class Publicaciones extends Model
 {
     use HasFactory;
     public $timestamps=false;
-    protected $table ='categorias';
+    protected $table ='publicaciones';
 
     public function categorias()
     {

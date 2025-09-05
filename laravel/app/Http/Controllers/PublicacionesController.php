@@ -11,7 +11,7 @@ class PublicacionesController extends Controller
 {
     public function publicaciones_index()
     {
-        $datos=Publicaciones::orderBy('id', 'desc')->paginate(2);
+        $datos=Publicaciones::with('categorias')->orderBy('id', 'desc')->paginate(2);
         return Inertia::render('publicaciones/Home', ['datos'=>$datos]);
     }
 }
