@@ -1,4 +1,4 @@
-import { Link, usePage } from "@inertiajs/react";
+import { Head, Link, usePage } from "@inertiajs/react";
 import { PublicacionesProps } from "../../../js/Interfaces/PublicacionesInterface";
 import MensajesFlash from "resources/js/componentes/MensajesFlash";
 import { route } from "ziggy-js";
@@ -11,10 +11,15 @@ import ImagenCustom from "../../../js/componentes/ImagenCustom";
 
 const Home = () => {
   const { datos } = usePage<PublicacionesProps>().props;
-  // console.log(datos)
+  const handleEliminar = async (id: number) => {
+         if(confirm("¿Realmente desea eliminar este registro?"))
+          {
+            window.location.href=`${route('publicaciones_delete', {id:id})}`;
+          }
+    };
   return (
     <>
-
+<Head title="Publicaciones" />
       <div className="row">
         <div className="col-12">
           <nav aria-label="breadcrumb">
@@ -58,11 +63,11 @@ const Home = () => {
                     </td>
                     <td className="text-center">
 
-                      <a href="#" onClick={() => { }} title="Editar">
+                      <Link href={route('publicaciones_edit', {id:dato.id})} title="Editar">
                         <i className="fas fa-edit"></i>
-                      </a>
+                      </Link>
                       &nbsp;&nbsp;
-                      <a onClick={() => { }} href="#" title="Eliminar"><i className="fas fa-trash"></i></a>
+                      <a onClick={() => {dato.id && handleEliminar(dato.id) }} href="#" title="Eliminar"><i className="fas fa-trash"></i></a>
                     </td>
                   </tr>
                 ))}

@@ -32,6 +32,9 @@ Route::delete('/categorias/{id}', [CategoriasController::class, 'categorias_dele
 Route::get('/publicaciones', [PublicacionesController::class, 'publicaciones_index'])->name('publicaciones_index');
 Route::get('/publicaciones/add', [PublicacionesController::class, 'publicaciones_add'])->name('publicaciones_add');
 Route::post('/publicaciones/add', [PublicacionesController::class, 'publicaciones_add_post'])->name('publicaciones_add_post');
+Route::get('/publicaciones/edit/{id}', [PublicacionesController::class, 'publicaciones_edit'])->name('publicaciones_edit');
+Route::post('/publicaciones/edit/{id}', [PublicacionesController::class, 'publicaciones_edit_post'])->name('publicaciones_edit_post');
+Route::get('/publicaciones/delete/{id}', [PublicacionesController::class, 'publicaciones_delete'])->name('publicaciones_delete');
 
 #método custom 404
 Route::any('{any}', function () {

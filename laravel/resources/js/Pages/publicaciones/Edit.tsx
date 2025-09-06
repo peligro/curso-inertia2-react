@@ -3,10 +3,10 @@ import { route } from "ziggy-js"
 import React, { useRef } from 'react';
 import MensajesFlash from "../../componentes/MensajesFlash";
 import { Breadcrumb } from "react-bootstrap";
-import { PublicacionesAddProps } from "../../../js/Interfaces/PublicacionesAddProps";
+import { PublicacionesEditProps } from "../../../js/Interfaces/PublicacionesEditProps";
 
-const Add = () => {
-       const { categorias, flash, errors } = usePage<PublicacionesAddProps>().props;
+const Edit = () => {
+       const { datos, categorias, flash, errors } = usePage<PublicacionesEditProps>().props;
     const fileInputRef = useRef<HTMLInputElement>(null); // ← Referencia para el file input
 
     /*
@@ -17,9 +17,9 @@ const Add = () => {
         foto:''
     });*/
     const { data, setData, post, processing } = useForm({
-        categoria_id: '0',
-        nombre: '',
-        descripcion: '',
+        categoria_id: `${datos.categorias_id}`,
+        nombre: datos.nombre,
+        descripcion: datos.descripcion,
         foto: null as File | null // ← Cambiado a null para archivos
     });
    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,7 +31,7 @@ const Add = () => {
       const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         //post(route('publicaciones_add_post')  );
-        post(route('publicaciones_add_post') ,{forceFormData: true } );
+        post(route('publicaciones_edit_post', {id: datos.id}) ,{forceFormData: true } );
     }
     // Mostrar mensajes flash
   /*
@@ -69,11 +69,11 @@ const Add = () => {
                    <Breadcrumb>
                       <Breadcrumb.Item href="/"><i className="fas fa-home"></i></Breadcrumb.Item>
                       <Breadcrumb.Item href="/publicaciones">Publicaciones</Breadcrumb.Item>
-                      <Breadcrumb.Item active>Crear</Breadcrumb.Item>
+                      <Breadcrumb.Item active>Editar: <strong>{datos.nombre}</strong></Breadcrumb.Item>
                     </Breadcrumb>
                     
                     
-                    <h1>Crear</h1>
+                    <h1>Editar: <strong>{datos.nombre}</strong></h1>
                     
                     {/* Mostrar mensaje flash */}
                    
@@ -81,7 +81,11 @@ const Add = () => {
                      {/*<form onSubmit={handleSubmit}> */}
                     <form onSubmit={handleSubmit}  encType="multipart/form-data">
                         <div className="row">
-                            
+                             <div className="mb-3">
+                                <hr />
+                                <img src={datos.foto} width="50%"  />
+                                <hr />
+                             </div>
                              <div className="mb-3">
                                 <label htmlFor="categoria_id" className="form-label">Categoría *</label>
                                 <select 
@@ -177,4 +181,4 @@ const Add = () => {
     );
 }
 
-export default Add;
+export default Edit;
