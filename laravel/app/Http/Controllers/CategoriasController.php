@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Categorias;
+use App\Models\Publicaciones;
 use Illuminate\Support\Str;
 class CategoriasController extends Controller
 {
@@ -64,6 +65,12 @@ class CategoriasController extends Controller
         {
             return redirect()->route('categorias_index')->with(['css'=>'danger', 'mensaje'=>'Ocurrió un error inesperado']);
         }
+        //validamos que no exista la categoría en alguna publicación
+        if(Publicaciones::where(['categorias_id'=>$id])->count()>=1)
+        {
+            return redirect()->route('categorias_index')->with(['css'=>'danger', 'mensaje'=>'Ocurrió un error inesperado (Categoría existe en publicaciones)']);
+        }
+        //eliminamos el registro
         try {
             
             $save->delete();

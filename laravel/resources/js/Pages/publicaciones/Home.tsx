@@ -27,7 +27,7 @@ const Home = () => {
           </nav>
           <h1>Publicaciones</h1>
           <p className=' d-flex justify-content-end'>
-            <a className="btn btn-outline-success" href="#" onClick={() => { }}><i className="fas fa-plus"></i> Crear</a>
+            <Link className="btn btn-outline-success" href={route('publicaciones_add')}><i className="fas fa-plus"></i> Crear</Link>
           </p>
           <div className="table-responsive">
             <table className="table table-bordered table-hover table-striped">

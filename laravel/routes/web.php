@@ -30,6 +30,8 @@ Route::put('/categorias/{id}', [CategoriasController::class, 'categorias_put'])-
 Route::delete('/categorias/{id}', [CategoriasController::class, 'categorias_delete'])->name('categorias_delete');
 
 Route::get('/publicaciones', [PublicacionesController::class, 'publicaciones_index'])->name('publicaciones_index');
+Route::get('/publicaciones/add', [PublicacionesController::class, 'publicaciones_add'])->name('publicaciones_add');
+Route::post('/publicaciones/add', [PublicacionesController::class, 'publicaciones_add_post'])->name('publicaciones_add_post');
 
 #método custom 404
 Route::any('{any}', function () {
