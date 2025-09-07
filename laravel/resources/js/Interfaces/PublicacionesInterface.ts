@@ -1,8 +1,5 @@
-// resources/js/Interfaces/PublicacionesInterface.ts
 import { PageProps } from '@inertiajs/core';
 import { CategoriaInterface } from './CategoriaInterface';
-
- 
 
 export interface PublicacionesInterface {
     id?: number;
@@ -10,7 +7,7 @@ export interface PublicacionesInterface {
     slug: string; 
     descripcion: string;
     categorias_id: number;
-    categorias?: CategoriaInterface; // ← Agrega la relación aquí
+    categorias?: CategoriaInterface;
     foto: string;
     fecha: string;
 }
@@ -40,4 +37,5 @@ export interface PublicacionesPagination {
 
 export interface PublicacionesProps extends PageProps {
     datos: PublicacionesPagination;
+    bucket: string;  
 }

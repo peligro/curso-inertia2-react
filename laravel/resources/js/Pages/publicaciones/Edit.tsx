@@ -6,7 +6,7 @@ import { Breadcrumb } from "react-bootstrap";
 import { PublicacionesEditProps } from "../../../js/Interfaces/PublicacionesEditProps";
 
 const Edit = () => {
-       const { datos, categorias, flash, errors } = usePage<PublicacionesEditProps>().props;
+       const { datos, categorias, flash, errors, bucket } = usePage<PublicacionesEditProps>().props;
     const fileInputRef = useRef<HTMLInputElement>(null); // ← Referencia para el file input
 
     /*
@@ -83,7 +83,7 @@ const Edit = () => {
                         <div className="row">
                              <div className="mb-3">
                                 <hr />
-                                <img src={datos.foto} width="50%"  />
+                                <img src={`/s3/${bucket}/${datos.foto}`} width="25%"  />
                                 <hr />
                              </div>
                              <div className="mb-3">

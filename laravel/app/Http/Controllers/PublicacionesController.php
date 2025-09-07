@@ -6,8 +6,8 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Categorias;
 use App\Models\Publicaciones;
-use Illuminate\Support\Str;
-use Cloudinary\Cloudinary;
+use Illuminate\Support\Str; 
+use Illuminate\Support\Facades\Storage;
 
 
 class PublicacionesController extends Controller
@@ -26,14 +26,7 @@ class PublicacionesController extends Controller
     {
         //dd($request->files);
        // print_r($request->foto->getClientOriginalName() );exit;
-      /*dd([
-        'cloudinary_config' => config('cloudinary'),
-        'filesystems_cloudinary' => config('filesystems.disks.cloudinary'),
-        'env_CLOUDINARY_URL' => env('CLOUDINARY_URL'),
-        'env_CLOUDINARY_CLOUD_NAME' => env('CLOUDINARY_CLOUD_NAME'),
-        'env_CLOUDINARY_API_KEY' => env('CLOUDINARY_API_KEY'),
-        'env_CLOUDINARY_API_SECRET' => env('CLOUDINARY_API_SECRET'),
-    ]);*/
+      
         $validated = $request->validate([
                 'categoria_id' => 'required|exists:categorias,id',
                 'nombre' => 'required|min:5|max:100',
@@ -53,28 +46,23 @@ class PublicacionesController extends Controller
                 'foto.max' => 'La imagen no debe pesar más de 2MB',
             ]);
             try {
-                $cloudinary = new Cloudinary([
-                    'cloud' => [
-                        'cloud_name' => config('filesystems.disks.cloudinary.cloud_name'),
-                        'api_key' => config('filesystems.disks.cloudinary.api_key'),
-                        'api_secret' => config('filesystems.disks.cloudinary.api_secret'),
-                    ]
-                ]);
-
-                $uploadedFile = $cloudinary->uploadApi()->upload(
-                    $request->file('foto')->getRealPath(),
-                    ['folder' => 'udemy-course/publicaciones']
-                );  
+                // Subir a S3
+                $path = $request->file('foto')->store('publicaciones', 's3');
+                //dd($path);
+                // Obtener URL pública (depende de tu configuración de bucket)
+                //$url = Storage::disk('s3')->url($path);
+                //dd($url);
+                 
             } catch (\Exception $e) {
                 return redirect()->back()->withErrors(['foto' => 'Error al subir la imagen: ' . $e->getMessage()])->withInput();
             }
-            // Guardar la URL de Cloudinary
+            // Guardar la URL de S3
                 $publicacion = new Publicaciones();
                 $publicacion->categorias_id = $request->categoria_id;
                 $publicacion->nombre = $request->nombre;
                 $publicacion->slug = Str::slug($request->nombre);
                 $publicacion->descripcion = $request->descripcion;
-                $publicacion->foto = $uploadedFile['secure_url'];
+                $publicacion->foto = $path;
                 $publicacion->save();
 
                 return redirect()->route('publicaciones_add')->with([
@@ -127,23 +115,12 @@ class PublicacionesController extends Controller
              
         }
         $publicacion = Publicaciones::findOrFail($id);
-        $fotoAnterior = $publicacion->foto; 
+        $fotoAnterior = $publicacion->foto;
+        $nuevaRuta = $publicacion->foto;
         if ($request->hasFile('foto')) 
         {
             try {
-                $cloudinary = new Cloudinary([
-                    'cloud' => [
-                        'cloud_name' => config('filesystems.disks.cloudinary.cloud_name'),
-                        'api_key' => config('filesystems.disks.cloudinary.api_key'),
-                        'api_secret' => config('filesystems.disks.cloudinary.api_secret'),
-                    ]
-                ]);
-
-                $uploadedFile = $cloudinary->uploadApi()->upload(
-                    $request->file('foto')->getRealPath(),
-                    ['folder' => 'udemy-course/publicaciones']
-                );  
-                $foto=$uploadedFile['secure_url'];
+                $path = $request->file('foto')->store('publicaciones', 's3');
 
                 
             } catch (\Exception $e) {
@@ -151,22 +128,21 @@ class PublicacionesController extends Controller
                 return redirect()->route('publicaciones_edit', ['id'=>$id])->with(['css'=>'danger', 'mensaje'=>'Error al subir la imagen: ' . $e->getMessage()]);
             }
             //eliminamos la foto anterior 
-            try {
-                    // Extraer el public_id de la URL anterior
-                    $urlParts = parse_url($fotoAnterior);
-                    $pathParts = pathinfo($urlParts['path']);
-                    $publicId = $pathParts['dirname'] . '/' . $pathParts['filename'];
+             try {
                     
-                    // Eliminar la versión y transformaciones si existen
-                    $publicId = preg_replace('/\/v\d+$/', '', $publicId);
-                    //dd($publicId);
-                    // Eliminar la foto anterior
-                    $cloudinary->uploadApi()->destroy($publicId);
-                    
+                if ($fotoAnterior && Storage::disk('s3')->exists($fotoAnterior))
+                    {
+                    try {
+                        Storage::disk('s3')->delete($fotoAnterior);
+                    } catch (\Exception $e) {
+                        // Log del error pero no interrumpir el flujo
+                        return redirect()->route('publicaciones_edit', ['id'=>$id])->with(['css'=>'danger', 'mensaje'=>'Error al eliminar foto anterior de S3: ' . $e->getMessage()]);
+                    }
+                }
                 } catch (\Exception $e) {
                     // No interrumpir el flujo si falla la eliminación, solo loggear 
-                    return redirect()->route('publicaciones_edit', ['id'=>$id])->with(['css'=>'danger', 'mensaje'=>'Error al eliminar foto anterior de Cloudinary: ' . $e->getMessage()]);
-                }  
+                    return redirect()->route('publicaciones_edit', ['id'=>$id])->with(['css'=>'danger', 'mensaje'=>'Error al eliminar foto anterior de S3: ' . $e->getMessage()]);
+                } 
         }
         
         
@@ -178,7 +154,7 @@ class PublicacionesController extends Controller
         $publicacion->descripcion = $request->descripcion;
         if ($request->hasFile('foto')) 
         {
-            $publicacion->foto = $foto;
+            $publicacion->foto = $path;
         }
         
         
@@ -191,30 +167,25 @@ class PublicacionesController extends Controller
     {
         $datos = Publicaciones::findOrFail($id);
         //eliminamos la foto anterior
-         $cloudinary = new Cloudinary([
-                    'cloud' => [
-                        'cloud_name' => config('filesystems.disks.cloudinary.cloud_name'),
-                        'api_key' => config('filesystems.disks.cloudinary.api_key'),
-                        'api_secret' => config('filesystems.disks.cloudinary.api_secret'),
-                    ]
-                ]);
+         
 
-        try {
-                    // Extraer el public_id de la URL anterior
-                    $urlParts = parse_url($datos->foto);
-                    $pathParts = pathinfo($urlParts['path']);
-                    $publicId = $pathParts['dirname'] . '/' . $pathParts['filename'];
-                    
-                    // Eliminar la versión y transformaciones si existen
-                    $publicId = preg_replace('/\/v\d+$/', '', $publicId);
-                    //dd($publicId);
-                    // Eliminar la foto anterior
-                    $cloudinary->uploadApi()->destroy($publicId);
-                    
+            if ($datos->foto) {
+                try {
+                    // Verificar que la foto existe en S3 antes de intentar eliminarla
+                    if (Storage::disk('s3')->exists($datos->foto)) {
+                        Storage::disk('s3')->delete($datos->foto);
+                        \Log::info('Foto eliminada de S3: ' . $datos->foto);
+                        
+                    } else {
+                         return redirect()->route('publicaciones_index' )->with(['css'=>'danger', 'mensaje'=>'Ocurrió un error inesperado (la fotono existe en s3)']);
+                    }
+                            
                 } catch (\Exception $e) {
-                    // No interrumpir el flujo si falla la eliminación, solo loggear 
-                    return redirect()->route('publicaciones_index' )->with(['css'=>'danger', 'mensaje'=>'Error al eliminar foto anterior de Cloudinary: ' . $e->getMessage()]);
-                }  
+                    return redirect()->route('publicaciones_index' )->with(['css'=>'danger', 'mensaje'=>'Ocurrió un error inesperado']);
+                }
+            }
+    
+            
         //eliminamos el registro
         try {
             

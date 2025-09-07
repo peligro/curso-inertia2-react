@@ -23,4 +23,5 @@ export interface PublicacionesEditProps extends PageProps {
         slug: string;
         fecha: string;
     };
+    bucket: string; 
 }

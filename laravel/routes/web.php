@@ -10,7 +10,9 @@ use App\Http\Controllers\LayoutController;
 use App\Http\Controllers\FormularioController;
 use App\Http\Controllers\CategoriasController;
 use App\Http\Controllers\PublicacionesController;
-
+use App\Http\Controllers\S3ProxyController;
+//use Illuminate\Support\Facades\Storage;
+//use Illuminate\Support\Facades\Response as ResponseStorage;
 
 Route::get('/', [HomeController::class, 'home_index'])->name('home_index');
 
@@ -36,6 +38,33 @@ Route::get('/publicaciones/edit/{id}', [PublicacionesController::class, 'publica
 Route::post('/publicaciones/edit/{id}', [PublicacionesController::class, 'publicaciones_edit_post'])->name('publicaciones_edit_post');
 Route::get('/publicaciones/delete/{id}', [PublicacionesController::class, 'publicaciones_delete'])->name('publicaciones_delete');
 
+
+#bucket
+Route::get('/s3/{bucket}/{path}', [S3ProxyController::class, 'serveFile'])
+    ->where('path', '.*')
+    ->name('s3.proxy');
+/*
+Route::get('/s3/{bucket}/{path}', function ($bucket, $path) {
+    try {
+        // Verificar que el bucket sea el correcto
+        if ($bucket !== config('filesystems.disks.s3.bucket')) {
+            abort(404);
+        }
+        
+        // Obtener el archivo de S3
+        $file = Storage::disk('s3')->get($path);
+        $mimeType = Storage::disk('s3')->mimeType($path);
+        
+        // Devolver el archivo con los headers correctos
+        return ResponseStorage::make($file, 200, [
+            'Content-Type' => $mimeType,
+            'Content-Disposition' => 'inline'
+        ]);
+        
+    } catch (\Exception $e) {
+        abort(404);
+    }
+})->where('path', '.*');*/
 #método custom 404
 Route::any('{any}', function () {
     return Inertia::render('Errors/Error404', [

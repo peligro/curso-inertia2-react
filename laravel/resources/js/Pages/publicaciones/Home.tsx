@@ -10,13 +10,13 @@ import ImagenCustom from "../../../js/componentes/ImagenCustom";
 
 
 const Home = () => {
-  const { datos } = usePage<PublicacionesProps>().props;
+  const { datos, bucket } = usePage<PublicacionesProps>().props;
   const handleEliminar = async (id: number) => {
          if(confirm("¿Realmente desea eliminar este registro?"))
           {
             window.location.href=`${route('publicaciones_delete', {id:id})}`;
           }
-    };
+    }; 
   return (
     <>
 <Head title="Publicaciones" />
@@ -55,7 +55,7 @@ const Home = () => {
                     <td>{dato.descripcion}</td>
                     <td className="text-center">
                       <ImagenCustom
-                        imagenUrl={`${dato.foto}`}
+                        imagenUrl={`/s3/${bucket}/${dato.foto}`}
                         titulo={`Logo ${dato.nombre}`}
                       >
                         <i className="fas fa-image" style={{ color: "#2f64b1" }} title={`Foto ${dato.nombre}`}></i>

@@ -55,6 +55,7 @@ class HandleInertiaRequests extends Middleware
                     'mensaje' => $request->session()->get('mensaje'),
                 ];
             },
+            'bucket'=>config('filesystems.disks.s3.bucket')
         ];
     }
 }
