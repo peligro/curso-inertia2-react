@@ -4,6 +4,37 @@ import { createRoot } from 'react-dom/client';
 import Layout from './Layout/Layout';
 import { PageModuleInterface } from './Interfaces/PageModuleInterface';
 
+import toastr from 'toastr';
+import 'toastr/build/toastr.min.css';
+
+// Extender la interfaz Window
+declare global {
+  interface Window {
+    toastr: typeof toastr;
+  }
+}
+
+// Configurar toastr
+toastr.options = {
+  closeButton: true,
+  debug: false,
+  newestOnTop: false,
+  progressBar: true,
+  positionClass: 'toast-top-right',
+  preventDuplicates: false, 
+  showDuration: 300,
+  hideDuration: 1000,
+  timeOut: 5000,
+  extendedTimeOut: 1000,
+  showEasing: 'swing',
+  hideEasing: 'linear',
+  showMethod: 'fadeIn',
+  hideMethod: 'fadeOut'
+};
+
+// Asignar a window
+window.toastr = toastr;
+
 
 createInertiaApp({
   title: (title) =>

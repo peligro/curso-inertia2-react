@@ -1,15 +1,15 @@
 import { Head, Link, useForm, usePage } from "@inertiajs/react"
 import { useState } from "react";
 import { Form, Modal } from "react-bootstrap";
-import MensajesFlash from "../../../js/componentes/MensajesFlash";
-import { CategoriaInterface, CategoriaProps } from "../../../js/Interfaces/CategoriaInterface";
+import MensajesFlash from "../../../js/componentes/MensajesFlash"; 
 import { FormularioProps } from "../../../js/Interfaces/FormularioProps";
 import { route } from "ziggy-js"
 import { AlertCustomInterface } from "resources/js/Interfaces/AlertCustomInterface";
 import AlertCustom from "../../../js/componentes/AlertCustom";
+import { PerfilesInterface, PerfilesProps } from "resources/js/Interfaces/PerfilesInterface";
 
 const Home = () => {
-  const { datos } = usePage<CategoriaProps>().props;
+  const { datos } = usePage<PerfilesProps>().props;
 
   //console.log('Datos recibidos:', datos);
   //formulario
@@ -33,7 +33,7 @@ const Home = () => {
       return false;
     }
     if (acciones == 1) {
-      post(route('categorias_post'), {
+      post(route('perfiles_post'), {
         onSuccess: () => {
           setData({
             nombre: ''
@@ -43,8 +43,7 @@ const Home = () => {
       });
     }
     if (acciones == 2) {
-      //alert(route('categorias_put', {id:accionesId}));return false;
-      put(route('categorias_put', { id: accionesId }), {
+      put(route('perfiles_put', { id: accionesId }), {
         onSuccess: () => {
           setData({
             nombre: ''
@@ -68,7 +67,7 @@ const Home = () => {
     });
     handleShow();
   };
-  const handleEditar = (modulo: CategoriaInterface) => {
+  const handleEditar = (modulo: PerfilesInterface) => {
 
     setAcciones(2);
     setAccionesId(modulo.id);
@@ -100,7 +99,7 @@ const Home = () => {
   };
   return (
     <>
-    <Head title="Categorías" />
+    <Head title="Perfiles" />
     <AlertCustom
                 estado={alertData.estado}
                 titulo={alertData.titulo}
@@ -115,11 +114,11 @@ const Home = () => {
               <li className="breadcrumb-item">
                 <Link href={route('home_index')}><i className="fas fa-home"></i></Link>
               </li>
-              <li className="breadcrumb-item active" aria-current="page">Categorías</li>
+              <li className="breadcrumb-item active" aria-current="page">Perfiles</li>
             </ol>
           </nav>
           <MensajesFlash flash={flash} />
-          <h1>Categorías</h1>
+          <h1>Perfiles</h1>
           <p className=' d-flex justify-content-end'>
             <a className="btn btn-outline-success" href="#" onClick={() => { handleCrear() }}><i className="fas fa-plus"></i> Crear</a>
           </p>
@@ -202,19 +201,7 @@ const Home = () => {
           </Form>
         </Modal.Body>
       </Modal>
-      {/*
-            <Modal show={show} onHide={handleClose} dialogClassName="modal-90w">
-                <Modal.Header closeButton>
-                    <Modal.Title>
-                        {acciones == 1 ? "Crear" : "Editar"}
-                    </Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <h1>hola</h1>
-                </Modal.Body>
-            </Modal>
-            */}
-      {/*fin modal */}
+     
     </>
   )
 }

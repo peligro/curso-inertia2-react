@@ -55,6 +55,15 @@ const Layout = ({ children }: LayoutPropsInterface) => {
                 <li className="nav-item">
                   <Link className={`nav-link ${currentPath === '/publicaciones' ? 'active' : ''}`} aria-current="page" href={route('publicaciones_index')}>Publicaciones</Link>
                 </li>
+                <li className="nav-item">
+                  <Link className={`nav-link ${currentPath === '/perfiles' ? 'active' : ''}`} aria-current="page" href={route('perfiles_index')}>Perfiles</Link>
+                </li>
+                <li className="nav-item">
+                  <Link className={`nav-link ${currentPath === '/usuarios' ? 'active' : ''}`} aria-current="page" href={route('usuarios_index')}>Usuarios</Link>
+                </li>
+                <li className="nav-item">
+                  <Link className={`nav-link ${currentPath === '/login' ? 'active' : ''}`} aria-current="page" href={route('login')}>Login</Link>
+                </li>
               </ul>
             </div>
           </div>
@@ -63,10 +72,10 @@ const Layout = ({ children }: LayoutPropsInterface) => {
       <div className="container">
 
 
-        <main>
-
-          {children}
-        </main>
+         <main>
+            
+                {children}
+            </main>
       </div>
 
     </>
