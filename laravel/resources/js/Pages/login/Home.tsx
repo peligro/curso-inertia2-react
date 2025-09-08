@@ -1,12 +1,12 @@
-import { Head, Link, useForm, usePage } from "@inertiajs/react"
+import { Head, useForm, usePage } from "@inertiajs/react"
 import { route } from "ziggy-js";
 import { Breadcrumb } from "react-bootstrap";
 import { LoginProps } from "resources/js/Interfaces/LoginProps";
 import ToastFlash from "../../../js/componentes/ToastFlash";
  
 const Home = () => {
-    const { errors, flash } = usePage().props as LoginProps;
-    const { data, setData, post, put, delete: destroy, processing } = useForm({
+    const { errors } = usePage().props as LoginProps;
+    const { data, setData, post, processing } = useForm({
         correo: '',
         password: ''
     });

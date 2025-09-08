@@ -47,6 +47,6 @@ class LoginController extends Controller
             return redirect()->intended('/');
         }
  
-        return redirect()->route('login_index' )->with(['css'=>'warning', 'mensaje'=>'Las credenciales proporcionadas no coinciden con nuestros registros']);
+        return redirect()->route('login' )->with(['css'=>'warning', 'mensaje'=>'Las credenciales proporcionadas no coinciden con nuestros registros']);
     }
 }

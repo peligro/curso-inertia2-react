@@ -38,6 +38,19 @@ class HandleInertiaRequests extends Middleware
         return [
             ...parent::share($request),
             
+            // Compartir el usuario autenticado
+            'auth' => [
+                'user' => $request->user() ? [
+                    'id' => $request->user()->id,
+                    'name' => $request->user()->name,
+                    'perfil' => session('perfil'),
+                    'perfil_id' => session('perfil_id'),
+                    'estado' => session('estado'),
+                    'estados_id' => session('estados_id'),
+
+                    // Agrega más campos si los necesitas
+                ] : null,
+            ],
             // Compartir errores de validación
             'errors' => function () use ($request) {
                 return $request->session()->get('errors')

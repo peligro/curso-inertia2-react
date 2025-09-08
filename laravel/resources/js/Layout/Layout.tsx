@@ -1,11 +1,23 @@
 import { LayoutPropsInterface } from '../Interfaces/LayoutPropsInterface';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { route } from 'ziggy-js';
+import { PageProps } from '../Interfaces/AuthInterface';
 
 const Layout = ({ children }: LayoutPropsInterface) => {
+      const { auth } = usePage<PageProps>().props;
+   
   const { url } = usePage()
   const currentPath = new URL(url, window.location.origin).pathname;
-
+  const isAuthenticated = !!auth.user;
+  /*
+  //Entendiendo la validación de la sesión en componentes React
+  if(isAuthenticated)
+  {
+    console.log(`existe: ${auth.user?.name}`)
+  }else
+  {
+    console.log("no no")
+  }*/
   return (
     <>
       <Head>
@@ -49,21 +61,39 @@ const Layout = ({ children }: LayoutPropsInterface) => {
                 <li className="nav-item">
                   <Link className={`nav-link ${currentPath === '/formulario/post' ? 'active' : ''}`} aria-current="page" href={route('formulario_post')}>Formulario post</Link>
                 </li>
-                <li className="nav-item">
+                {isAuthenticated ?(
+                  <>
+                   <li className="nav-item">
                   <Link className={`nav-link ${currentPath === '/categorias' ? 'active' : ''}`} aria-current="page" href={route('categorias_index')}>Categorías</Link>
                 </li>
                 <li className="nav-item">
                   <Link className={`nav-link ${currentPath === '/publicaciones' ? 'active' : ''}`} aria-current="page" href={route('publicaciones_index')}>Publicaciones</Link>
                 </li>
-                <li className="nav-item">
+                {auth.user?.perfil_id=="1" && (
+                  <>
+                   <li className="nav-item">
                   <Link className={`nav-link ${currentPath === '/perfiles' ? 'active' : ''}`} aria-current="page" href={route('perfiles_index')}>Perfiles</Link>
                 </li>
                 <li className="nav-item">
                   <Link className={`nav-link ${currentPath === '/usuarios' ? 'active' : ''}`} aria-current="page" href={route('usuarios_index')}>Usuarios</Link>
                 </li>
+                  </>
+                )}
+
+
                 <li className="nav-item">
+                  <Link className={`nav-link `} method="post" aria-current="page" href={route('logout')}>Cerrar sesión</Link>
+                </li>
+                  </>
+                ):(
+                  <>
+                  <li className="nav-item">
                   <Link className={`nav-link ${currentPath === '/login' ? 'active' : ''}`} aria-current="page" href={route('login')}>Login</Link>
                 </li>
+                  </>
+                )}
+               
+                
               </ul>
             </div>
           </div>

@@ -5,6 +5,9 @@ use Illuminate\Support\Facades\Route;
 
 use Inertia\Inertia;
 use Symfony\Component\HttpFoundation\Response;
+
+use App\Http\Middleware\Acceso;
+
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LayoutController;
 use App\Http\Controllers\FormularioController;
@@ -14,6 +17,7 @@ use App\Http\Controllers\S3ProxyController;
 use App\Http\Controllers\PerfilesController;
 use App\Http\Controllers\UsuariosController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\CerrarSesionController;
 
 //use Illuminate\Support\Facades\Storage;
 //use Illuminate\Support\Facades\Response as ResponseStorage;
@@ -30,31 +34,36 @@ Route::get('/formulario', [FormularioController::class, 'formulario_index'])->na
 Route::get('/formulario/post', [FormularioController::class, 'formulario_post'])->name('formulario_post');
 Route::post('/formulario/post', [FormularioController::class, 'formulario_post_post'])->name('formulario_post_post');
 
-Route::middleware(['auth' ])->group(function () {
+//Route::middleware(['auth' ])->group(function () {
+Route::middleware([Acceso::class ])->group(function () {
+    
     Route::get('/categorias', [CategoriasController::class, 'categorias_index'])->name('categorias_index');
-Route::post('/categorias', [CategoriasController::class, 'categorias_post'])->name('categorias_post');
-Route::put('/categorias/{id}', [CategoriasController::class, 'categorias_put'])->name('categorias_put');
-Route::delete('/categorias/{id}', [CategoriasController::class, 'categorias_delete'])->name('categorias_delete');
+    Route::post('/categorias', [CategoriasController::class, 'categorias_post'])->name('categorias_post');
+    Route::put('/categorias/{id}', [CategoriasController::class, 'categorias_put'])->name('categorias_put');
+    Route::delete('/categorias/{id}', [CategoriasController::class, 'categorias_delete'])->name('categorias_delete');
 
-Route::get('/publicaciones', [PublicacionesController::class, 'publicaciones_index'])->name('publicaciones_index');
-Route::get('/publicaciones/add', [PublicacionesController::class, 'publicaciones_add'])->name('publicaciones_add');
-Route::post('/publicaciones/add', [PublicacionesController::class, 'publicaciones_add_post'])->name('publicaciones_add_post');
-Route::get('/publicaciones/edit/{id}', [PublicacionesController::class, 'publicaciones_edit'])->name('publicaciones_edit');
-Route::post('/publicaciones/edit/{id}', [PublicacionesController::class, 'publicaciones_edit_post'])->name('publicaciones_edit_post');
-Route::get('/publicaciones/delete/{id}', [PublicacionesController::class, 'publicaciones_delete'])->name('publicaciones_delete');
+    Route::get('/publicaciones', [PublicacionesController::class, 'publicaciones_index'])->name('publicaciones_index');
+    Route::get('/publicaciones/add', [PublicacionesController::class, 'publicaciones_add'])->name('publicaciones_add');
+    Route::post('/publicaciones/add', [PublicacionesController::class, 'publicaciones_add_post'])->name('publicaciones_add_post');
+    Route::get('/publicaciones/edit/{id}', [PublicacionesController::class, 'publicaciones_edit'])->name('publicaciones_edit');
+    Route::post('/publicaciones/edit/{id}', [PublicacionesController::class, 'publicaciones_edit_post'])->name('publicaciones_edit_post');
+    Route::get('/publicaciones/delete/{id}', [PublicacionesController::class, 'publicaciones_delete'])->name('publicaciones_delete');
 
-Route::get('/perfiles', [PerfilesController::class, 'perfiles_index'])->name('perfiles_index');
-Route::post('/perfiles', [PerfilesController::class, 'perfiles_post'])->name('perfiles_post');
-Route::put('/perfiles/{id}', [PerfilesController::class, 'perfiles_put'])->name('perfiles_put');
-Route::delete('/perfiles/{id}', [PerfilesController::class, 'perfiles_delete'])->name('perfiles_delete');
+    Route::get('/perfiles', [PerfilesController::class, 'perfiles_index'])->name('perfiles_index');
+    Route::post('/perfiles', [PerfilesController::class, 'perfiles_post'])->name('perfiles_post');
+    Route::put('/perfiles/{id}', [PerfilesController::class, 'perfiles_put'])->name('perfiles_put');
+    Route::delete('/perfiles/{id}', [PerfilesController::class, 'perfiles_delete'])->name('perfiles_delete');
 
-Route::get('/usuarios', [UsuariosController::class, 'usuarios_index'])->name('usuarios_index');
+    Route::get('/usuarios', [UsuariosController::class, 'usuarios_index'])->name('usuarios_index');
 });
 
 
 
 Route::get('/auth/login', [LoginController::class, 'login_index'])->name('login');
 Route::post('/auth/login', [LoginController::class, 'login_post'])->name('login_post');
+
+Route::post('/auth/logout', [CerrarSesionController::class, 'logout'])->name('logout');
+
 
 #bucket
 Route::get('/s3/{bucket}/{path}', [S3ProxyController::class, 'serveFile'])
