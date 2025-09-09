@@ -2,12 +2,18 @@ import { Head, Link, usePage } from "@inertiajs/react"
 import { UsersMetadaInterface, UsuariosProps } from "../../../js/Interfaces/UsuariosInterface";
 import { route } from "ziggy-js"
 import { formateaFecha } from "../../../js/Helpers/Helpers";
+import PaginacionCustom from "../../../js/componentes/PaginacionCustom";
 
 
 
 const Home = () => {
     const { datos } = usePage<UsuariosProps>().props;
-  console.log(datos.data  )
+  const handleEliminar = async (id: number) => {
+
+    if (confirm("¿Realmente desea eliminar este registro?")) {
+      window.location.href=`${route('usuarios_eliminar', {id: id})}`;
+    }
+  };
   return (
     <>
       <Head title="Usuarios" />
@@ -23,7 +29,7 @@ const Home = () => {
           </nav> 
           <h1>Usuarios</h1>
           <p className=' d-flex justify-content-end'>
-            <a className="btn btn-outline-success" href="#" onClick={() => {   }}><i className="fas fa-plus"></i> Crear</a>
+            <Link className="btn btn-outline-success" href={route('usuarios_add')}><i className="fas fa-plus"></i> Crear</Link>
           </p>
           <div className="table-responsive">
             <table className="table table-bordered table-hover table-striped">
@@ -49,16 +55,17 @@ const Home = () => {
                     <td>{formateaFecha(dato.users?.created_at)}</td>
                     <td className="text-center">
 
-                      <a href="#" onClick={() => {   }} title="Editar">
+                      <Link href={route('usuarios_edit', {id: dato.id})} title="Editar">
                         <i className="fas fa-edit"></i>
-                      </a>
+                      </Link>
                       &nbsp;&nbsp;
-                      <a onClick={() => {   }} href="#" title="Eliminar"><i className="fas fa-trash"></i></a>
+                      <a onClick={() => { dato.id && handleEliminar(dato.id)  }} href="#" title="Eliminar"><i className="fas fa-trash"></i></a>
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
+            <PaginacionCustom datos={datos} />
           </div>
 
         </div>

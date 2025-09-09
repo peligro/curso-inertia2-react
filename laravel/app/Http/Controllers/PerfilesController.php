@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 use App\Models\Perfiles;
+use App\Models\UsersMetadata;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 class PerfilesController extends Controller
@@ -60,10 +61,10 @@ class PerfilesController extends Controller
         {
             return redirect()->route('perfiles_index')->with(['css'=>'danger', 'mensaje'=>'Ocurrió un error inesperado']);
         }
-        //validamos que no exista la categoría en alguna publicación
-        if(Publicaciones::where(['perfiles_id'=>$id])->count()>=1)
+        //validamos que no exista el perfil en algún usuario
+        if(UsersMetadata::where(['perfiles_id'=>$id])->count()>=1)
         {
-            return redirect()->route('perfiles_index')->with(['css'=>'danger', 'mensaje'=>'Ocurrió un error inesperado (Categoría existe en publicaciones)']);
+            return redirect()->route('perfiles_index')->with(['css'=>'danger', 'mensaje'=>'Ocurrió un error inesperado (Perfil existe en usuarios)']);
         }
         //eliminamos el registro
         try {

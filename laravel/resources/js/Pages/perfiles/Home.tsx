@@ -79,7 +79,7 @@ const Home = () => {
   const handleEliminar = async (id: number) => {
 
     if (confirm("¿Realmente desea eliminar este registro?")) {
-      destroy(route('categorias_delete', { id: id }));
+      destroy(route('perfiles_delete', { id: id }));
     }
   };
   //alertCustom

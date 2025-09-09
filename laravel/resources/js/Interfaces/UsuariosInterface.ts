@@ -53,7 +53,7 @@ export interface UsuariosPagination {
     to: number;
     total: number;
 }
-
+ 
 export interface UsuariosProps extends PageProps {
     datos: UsuariosPagination;   
 }

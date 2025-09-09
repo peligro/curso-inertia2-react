@@ -55,6 +55,11 @@ Route::middleware([Acceso::class ])->group(function () {
     Route::delete('/perfiles/{id}', [PerfilesController::class, 'perfiles_delete'])->name('perfiles_delete');
 
     Route::get('/usuarios', [UsuariosController::class, 'usuarios_index'])->name('usuarios_index');
+    Route::get('/usuarios/add', [UsuariosController::class, 'usuarios_add'])->name('usuarios_add');
+    Route::post('/usuarios/add', [UsuariosController::class, 'usuarios_add_post'])->name('usuarios_add_post');
+    Route::get('/usuarios/edit/{id}', [UsuariosController::class, 'usuarios_edit'])->name('usuarios_edit');
+    Route::post('/usuarios/edit/{id}', [UsuariosController::class, 'usuarios_edit_post'])->name('usuarios_edit_post');
+    Route::get('/usuarios/eliminar/{id}', [UsuariosController::class, 'usuarios_eliminar'])->name('usuarios_eliminar');
 });
 
 

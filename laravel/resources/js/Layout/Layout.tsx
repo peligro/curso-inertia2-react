@@ -17,7 +17,7 @@ const Layout = ({ children }: LayoutPropsInterface) => {
   }else
   {
     console.log("no no")
-  }*/
+  }*/ 
   return (
     <>
       <Head>
@@ -64,7 +64,7 @@ const Layout = ({ children }: LayoutPropsInterface) => {
                 {isAuthenticated ?(
                   <>
                    <li className="nav-item">
-                  <Link className={`nav-link ${currentPath === '/categorias' ? 'active' : ''}`} aria-current="page" href={route('categorias_index')}>Categorías</Link>
+                  <Link className={`nav-link ${currentPath === '/categorias' ? 'active' : ''}`} aria-current="page" href={route('categorias_index')}>Categorías {auth.user?.perfil_id}</Link>
                 </li>
                 <li className="nav-item">
                   <Link className={`nav-link ${currentPath === '/publicaciones' ? 'active' : ''}`} aria-current="page" href={route('publicaciones_index')}>Publicaciones</Link>
