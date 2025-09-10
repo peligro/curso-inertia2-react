@@ -1,9 +1,10 @@
 import { Head, Link, usePage } from "@inertiajs/react";
 import { PublicacionesProps } from "../../../js/Interfaces/PublicacionesInterface";
-import MensajesFlash from "resources/js/componentes/MensajesFlash";
+import MensajesFlash from "../../../js/componentes/MensajesFlash";
 import { route } from "ziggy-js";
 import PaginacionCustom from "../../../js/componentes/PaginacionCustom";
 import ImagenCustom from "../../../js/componentes/ImagenCustom";
+import { FormularioProps } from "resources/js/Interfaces/FormularioProps";
 
 
 
@@ -11,6 +12,7 @@ import ImagenCustom from "../../../js/componentes/ImagenCustom";
 
 const Home = () => {
   const { datos, bucket } = usePage<PublicacionesProps>().props;
+  const { flash } = usePage().props as FormularioProps;
   const handleEliminar = async (id: number) => {
          if(confirm("¿Realmente desea eliminar este registro?"))
           {
@@ -30,6 +32,7 @@ const Home = () => {
               <li className="breadcrumb-item active" aria-current="page">Publicaciones</li>
             </ol>
           </nav>
+          <MensajesFlash flash={flash}/>
           <h1>Publicaciones</h1>
           <p className=' d-flex justify-content-end'>
             <Link className="btn btn-outline-success" href={route('publicaciones_add')}><i className="fas fa-plus"></i> Crear</Link>

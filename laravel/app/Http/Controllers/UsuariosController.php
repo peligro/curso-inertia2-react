@@ -10,6 +10,13 @@ use App\Models\Perfiles;
 use Illuminate\Support\Facades\Hash;
 class UsuariosController extends Controller
 {
+    public function __construct()
+    {
+        if(session('perfil_id')!='1')
+        {
+            abort(404);
+        }
+    }
     public function usuarios_index()
     {
         $datos = UsersMetadata::with(['users', 'estados', 'perfiles'])
@@ -133,6 +140,9 @@ class UsuariosController extends Controller
         try {
             
             $save->delete();
+            // Ahora eliminamos el usuario de la tabla users
+            $user = User::findOrFail($save->users_id);
+            $user->delete();
             return redirect()->route('usuarios_index')->with([
             'css' => 'success', 
             'mensaje' => 'Se eliminó registro exitosamente'

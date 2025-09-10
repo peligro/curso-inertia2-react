@@ -3,11 +3,14 @@ import { UsersMetadaInterface, UsuariosProps } from "../../../js/Interfaces/Usua
 import { route } from "ziggy-js"
 import { formateaFecha } from "../../../js/Helpers/Helpers";
 import PaginacionCustom from "../../../js/componentes/PaginacionCustom";
+import { FormularioProps } from "resources/js/Interfaces/FormularioProps";
+import MensajesFlash from "../../../js/componentes/MensajesFlash";
 
 
 
 const Home = () => {
     const { datos } = usePage<UsuariosProps>().props;
+    const { flash } = usePage().props as FormularioProps;
   const handleEliminar = async (id: number) => {
 
     if (confirm("¿Realmente desea eliminar este registro?")) {
@@ -27,6 +30,7 @@ const Home = () => {
               <li className="breadcrumb-item active" aria-current="page">Usuarios</li>
             </ol>
           </nav> 
+          <MensajesFlash flash={flash}/>
           <h1>Usuarios</h1>
           <p className=' d-flex justify-content-end'>
             <Link className="btn btn-outline-success" href={route('usuarios_add')}><i className="fas fa-plus"></i> Crear</Link>

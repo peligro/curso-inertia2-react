@@ -1,10 +1,10 @@
 import { LayoutPropsInterface } from '../Interfaces/LayoutPropsInterface';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { route } from 'ziggy-js';
-import { PageProps } from '../Interfaces/AuthInterface';
+import { LogueadoProps } from '../Interfaces/AuthInterface';
 
 const Layout = ({ children }: LayoutPropsInterface) => {
-      const { auth } = usePage<PageProps>().props;
+      const { auth } = usePage<LogueadoProps>().props;
    
   const { url } = usePage()
   const currentPath = new URL(url, window.location.origin).pathname;
@@ -64,7 +64,7 @@ const Layout = ({ children }: LayoutPropsInterface) => {
                 {isAuthenticated ?(
                   <>
                    <li className="nav-item">
-                  <Link className={`nav-link ${currentPath === '/categorias' ? 'active' : ''}`} aria-current="page" href={route('categorias_index')}>Categorías {auth.user?.perfil_id}</Link>
+                  <Link className={`nav-link ${currentPath === '/categorias' ? 'active' : ''}`} aria-current="page" href={route('categorias_index')}>Categorías</Link>
                 </li>
                 <li className="nav-item">
                   <Link className={`nav-link ${currentPath === '/publicaciones' ? 'active' : ''}`} aria-current="page" href={route('publicaciones_index')}>Publicaciones</Link>

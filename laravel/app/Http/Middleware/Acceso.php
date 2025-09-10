@@ -32,7 +32,7 @@ class Acceso
             return redirect()->route('login');
         }
         $request->session()->put('users_metadata_id', $usuario->id);
-        $request->session()->put('perfil_id', $usuario->perfil_id);
+        $request->session()->put('perfil_id', $usuario->perfiles_id);
         $request->session()->put('perfil', $usuario->perfiles->nombre);
         $request->session()->put('estados_id', $usuario->estados_id);
         $request->session()->put('estado', $usuario->estados->nombre);

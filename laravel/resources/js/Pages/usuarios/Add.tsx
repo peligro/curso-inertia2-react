@@ -1,11 +1,12 @@
 import { Head, useForm, usePage } from "@inertiajs/react"
 import { Breadcrumb } from "react-bootstrap";
+import MensajesFlash from "../../../js/componentes/MensajesFlash";
 import { UsuariosFormularioProps } from "resources/js/Interfaces/UsuariosFormulario";
 import { PerfilInterface } from "resources/js/Interfaces/UsuariosInterface";
 import { route } from "ziggy-js";
  
 const Add = () => {
-     const { perfiles, errors } = usePage<UsuariosFormularioProps>().props
+     const { perfiles, errors, flash } = usePage<UsuariosFormularioProps>().props
     const { data, setData, post, processing } = useForm({
         perfil_id:'0',
         nombre: '',
@@ -45,6 +46,7 @@ const Add = () => {
                             <button type="button" className="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                         </div>
                     )}
+                    <MensajesFlash flash={flash}/>
                     <form onSubmit={handleSubmit} encType="multipart/form-data">
                         <div className="row">
 

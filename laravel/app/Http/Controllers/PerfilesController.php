@@ -7,6 +7,13 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 class PerfilesController extends Controller
 {
+    public function __construct()
+    {
+        if(session('perfil_id')!='1')
+        {
+            abort(404);
+        }
+    }
     public function perfiles_index()
     {
         $datos=Perfiles::orderBy('id', 'desc')->get();

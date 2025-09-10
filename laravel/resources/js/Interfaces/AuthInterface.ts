@@ -11,7 +11,7 @@ export interface Auth {
     user: User | null;
 }
 
-export interface PageProps {
+export interface LogueadoProps {
     auth: Auth;
     flash?: {
         success?: string;

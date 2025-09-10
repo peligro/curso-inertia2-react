@@ -48,7 +48,6 @@ Route::middleware([Acceso::class ])->group(function () {
     Route::get('/publicaciones/edit/{id}', [PublicacionesController::class, 'publicaciones_edit'])->name('publicaciones_edit');
     Route::post('/publicaciones/edit/{id}', [PublicacionesController::class, 'publicaciones_edit_post'])->name('publicaciones_edit_post');
     Route::get('/publicaciones/delete/{id}', [PublicacionesController::class, 'publicaciones_delete'])->name('publicaciones_delete');
-
     Route::get('/perfiles', [PerfilesController::class, 'perfiles_index'])->name('perfiles_index');
     Route::post('/perfiles', [PerfilesController::class, 'perfiles_post'])->name('perfiles_post');
     Route::put('/perfiles/{id}', [PerfilesController::class, 'perfiles_put'])->name('perfiles_put');
