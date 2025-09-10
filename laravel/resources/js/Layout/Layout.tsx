@@ -79,10 +79,12 @@ const Layout = ({ children }: LayoutPropsInterface) => {
                 </li>
                   </>
                 )}
-
+                <li className="nav-item">
+                  <Link className={`nav-link ${currentPath === '/openai' ? 'active' : ''}`} aria-current="page" href={route('openai_index')}>Openai</Link>
+                </li>
 
                 <li className="nav-item">
-                  <Link className={`nav-link `} method="post" aria-current="page" href={route('logout')}>Cerrar sesión</Link>
+                  <Link className={`nav-link `} method="post" aria-current="page" href={route('logout')}><i className="fas fa-lock"></i></Link>
                 </li>
                   </>
                 ):(

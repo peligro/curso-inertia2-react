@@ -19,6 +19,8 @@ use App\Http\Controllers\UsuariosController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\CerrarSesionController;
 
+use App\Http\Controllers\OpenaiController;
+
 //use Illuminate\Support\Facades\Storage;
 //use Illuminate\Support\Facades\Response as ResponseStorage;
 
@@ -59,6 +61,12 @@ Route::middleware([Acceso::class ])->group(function () {
     Route::get('/usuarios/edit/{id}', [UsuariosController::class, 'usuarios_edit'])->name('usuarios_edit');
     Route::post('/usuarios/edit/{id}', [UsuariosController::class, 'usuarios_edit_post'])->name('usuarios_edit_post');
     Route::get('/usuarios/eliminar/{id}', [UsuariosController::class, 'usuarios_eliminar'])->name('usuarios_eliminar');
+
+
+    Route::get('/openai', [OpenaiController::class, 'openai_index'])->name('openai_index');
+    Route::get('/openai/api', [OpenaiController::class, 'openai_api'])->name('openai_api');
+    Route::get('/openiai/chatbot-api', [OpenaiController::class, 'openai_chatbot_api'])->name('openai_chatbot_api');
+    Route::post('/openiai/chatbot-api', [OpenaiController::class, 'openai_chatbot_api_post'])->name('openai_chatbot_api_post');
 });
 
 
