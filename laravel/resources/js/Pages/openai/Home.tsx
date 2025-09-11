@@ -5,7 +5,7 @@ const Home = () => {
   return (
     <>
    
-     <Head title="Openia" />
+     <Head title="Openai" />
       <div className="row">
         <div className="col-12">
           <nav aria-label="breadcrumb">
@@ -16,7 +16,7 @@ const Home = () => {
               <li className="breadcrumb-item active" aria-current="page">Openai</li>
             </ol>
           </nav> 
-          <h1>Openia</h1>
+          <h1>Openai</h1>
           
           <ul>
             <li>
@@ -25,6 +25,9 @@ const Home = () => {
             
             <li>
               <Link href={route('openai_chatbot_api')}>Chatbot API</Link>
+            </li>
+            <li>
+              <Link href={route('openai_consulta_simple')}>Consulta simple</Link>
             </li>
             <li>
               <Link href="">Vía Laravel</Link>

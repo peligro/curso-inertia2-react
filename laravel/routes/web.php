@@ -67,6 +67,8 @@ Route::middleware([Acceso::class ])->group(function () {
     Route::get('/openai/api', [OpenaiController::class, 'openai_api'])->name('openai_api');
     Route::get('/openiai/chatbot-api', [OpenaiController::class, 'openai_chatbot_api'])->name('openai_chatbot_api');
     Route::post('/openiai/chatbot-api', [OpenaiController::class, 'openai_chatbot_api_post'])->name('openai_chatbot_api_post');
+    Route::get('/openiai/consulta-simple', [OpenaiController::class, 'openai_consulta_simple'])->name('openai_consulta_simple');
+    
 });
 
 
