@@ -1,12 +1,9 @@
 import { Head, Link, usePage } from "@inertiajs/react";
-
-import { route } from "ziggy-js"; 
+import { route } from "ziggy-js";
 import { InertiaPageProps } from "resources/js/Interfaces/OpenAIProps";
 import { formatTime } from "../../../js/Helpers/Helpers";
-// Definir la interfaz para las props de la página
 
-
-const API = () => {
+const ClienteOficial1 = () => {
    const { props } = usePage<{ props: InertiaPageProps }>();
   const { respuesta, pregunta, tiempo } = props;
 
@@ -28,10 +25,10 @@ const API = () => {
               <li className="breadcrumb-item">
                 <Link href={route('openai_index')}>Openai</Link>
               </li>
-              <li className="breadcrumb-item active" aria-current="page">Vía API</li>
+              <li className="breadcrumb-item active" aria-current="page">Generación de imagen con dall-e-3</li>
             </ol>
           </nav> 
-          <h1>Vía API</h1>
+          <h1>Generación de imagen con dall-e-3</h1>
           
           <div className="card mt-4">
             
@@ -51,11 +48,10 @@ const API = () => {
             </div>
             <div className="card-body">
               {respuesta ? (
-                <div className="alert alert-info">
-                  <pre className="mb-0" style={{ whiteSpace: 'pre-wrap' }}>
-                    {responseText}
-                  </pre>
-                </div>
+                 
+                    
+                  <img src={`/s3/curso-udemy/${responseText}`} alt="" width="50%" />
+                
               ) : (
                 <div className="alert alert-warning">
                   No se recibió respuesta de la IA
@@ -69,4 +65,4 @@ const API = () => {
   );
 };
 
-export default API;
+export default ClienteOficial1;

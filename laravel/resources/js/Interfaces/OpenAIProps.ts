@@ -1,5 +1,16 @@
 import { PageProps } from "@inertiajs/core";
 
+
+export interface OpenIAInterfaceSimple {
+  pregunta: string;
+  respuesta:string;
+  tiempo: number;
+}
+
+export interface InertiaPageProps extends PageProps {
+  props: OpenIAInterfaceSimple;
+}
+
 // Interfaces
 export interface ApiResponse {
     respuesta: string;

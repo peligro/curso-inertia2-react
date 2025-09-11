@@ -1,20 +1,8 @@
 import { Head, Link, usePage } from "@inertiajs/react";
-import { route } from "ziggy-js";
-import { PageProps } from "@inertiajs/core";
+import { route } from "ziggy-js"; 
 
-// Definir la interfaz para las props de la página
-export interface OpenIAInterfaceSimple {
-  pregunta: string;
-  respuesta:string;
-  tiempo: number;
-}
-const formatTime = (ms: number): string => {
-  if (ms < 1000) return `${ms} ms`;
-  return `${(ms / 1000).toFixed(2)} segundos`;
-};
-interface InertiaPageProps extends PageProps {
-  props: OpenIAInterfaceSimple;
-}
+import { InertiaPageProps } from "resources/js/Interfaces/OpenAIProps";
+import { formatTime } from "../../../js/Helpers/Helpers";
 
 const ConsultaSimple = () => {
    const { props } = usePage<{ props: InertiaPageProps }>();

@@ -20,6 +20,7 @@ use App\Http\Controllers\LoginController;
 use App\Http\Controllers\CerrarSesionController;
 
 use App\Http\Controllers\OpenaiController;
+use App\Http\Controllers\DeepseekController;
 
 //use Illuminate\Support\Facades\Storage;
 //use Illuminate\Support\Facades\Response as ResponseStorage;
@@ -68,6 +69,17 @@ Route::middleware([Acceso::class ])->group(function () {
     Route::get('/openiai/chatbot-api', [OpenaiController::class, 'openai_chatbot_api'])->name('openai_chatbot_api');
     Route::post('/openiai/chatbot-api', [OpenaiController::class, 'openai_chatbot_api_post'])->name('openai_chatbot_api_post');
     Route::get('/openiai/consulta-simple', [OpenaiController::class, 'openai_consulta_simple'])->name('openai_consulta_simple');
+    Route::get('/openiai/cliente-oficial1', [OpenaiController::class, 'openai_cliente_oficial_1'])->name('openai_cliente_oficial_1');
+    Route::get('/openiai/cliente-oficial2', [OpenaiController::class, 'openai_cliente_oficial_2'])->name('openai_cliente_oficial_2');
+    Route::post('/openiai/cliente-oficial2', [OpenaiController::class, 'openai_cliente_oficial_2_post'])->name('openai_cliente_oficial_2_post');
+    Route::get('/openiai/cliente-oficial3', [OpenaiController::class, 'openai_cliente_oficial_3'])->name('openai_cliente_oficial_3');
+    
+    Route::get('/deepseek', [DeepseekController::class, 'deepseek_index'])->name('deepseek_index');
+    Route::get('/deepseek/api', [DeepseekController::class, 'deepseek_api'])->name('deepseek_api');
+    Route::get('/deepseek/chatbot', [DeepseekController::class, 'deepseek_chatbot_api'])->name('deepseek_chatbot_api');
+    Route::post('/deepseek/chatbot', [DeepseekController::class, 'deepseek_chatbot_api_post'])->name('deepseek_chatbot_api_post');
+    Route::get('/deepseek/consulta-simple', [DeepseekController::class, 'deepseek_consulta_simple'])->name('deepseek_consulta_simple');
+    
     
 });
 

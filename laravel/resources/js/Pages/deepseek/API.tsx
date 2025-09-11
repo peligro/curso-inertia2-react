@@ -26,7 +26,7 @@ const API = () => {
                 <Link href={route('home_index')}><i className="fas fa-home"></i></Link>
               </li>
               <li className="breadcrumb-item">
-                <Link href={route('openai_index')}>Openai</Link>
+                <Link href={route('deepseek_index')}>Deepseek</Link>
               </li>
               <li className="breadcrumb-item active" aria-current="page">Vía API</li>
             </ol>

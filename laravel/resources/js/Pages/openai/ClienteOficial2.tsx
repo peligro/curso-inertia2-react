@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { PageCustomProps } from "resources/js/Interfaces/OpenAIProps";
 
 
-const ChatbotAPI = () => {
+const ClienteOficial2 = () => {
     // Obtener props de la página
     const { errors, api_response } = usePage<PageCustomProps>().props;
     
@@ -31,7 +31,7 @@ const ChatbotAPI = () => {
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         
-        post(route('openai_chatbot_api_post'), {
+        post(route('openai_cliente_oficial_2_post'), {
             preserveScroll: true,
             preserveState: true,
             onSuccess: () => {
@@ -56,10 +56,10 @@ const ChatbotAPI = () => {
                             <li className="breadcrumb-item">
                                 <Link href={route('openai_index')}>Openai</Link>
                             </li>
-                            <li className="breadcrumb-item active" aria-current="page">Chatbot API</li>
+                            <li className="breadcrumb-item active" aria-current="page">Chatbot Cliente oficial Laravel</li>
                         </ol>
                     </nav> 
-                    <h1>Chatbot API</h1>
+                    <h1>Chatbot Cliente oficial Laravel</h1>
                     
                     <div className="card mt-4">
                         <div className="card-header">
@@ -127,7 +127,7 @@ const ChatbotAPI = () => {
     );
 };
 
-export default ChatbotAPI;
+export default ClienteOficial2;
 
 {/*
   

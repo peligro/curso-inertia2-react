@@ -1,12 +1,9 @@
 import { Head, Link, usePage } from "@inertiajs/react";
-
-import { route } from "ziggy-js"; 
+import { route } from "ziggy-js";
 import { InertiaPageProps } from "resources/js/Interfaces/OpenAIProps";
 import { formatTime } from "../../../js/Helpers/Helpers";
-// Definir la interfaz para las props de la página
 
-
-const API = () => {
+const ClienteOficial1 = () => {
    const { props } = usePage<{ props: InertiaPageProps }>();
   const { respuesta, pregunta, tiempo } = props;
 
@@ -28,10 +25,11 @@ const API = () => {
               <li className="breadcrumb-item">
                 <Link href={route('openai_index')}>Openai</Link>
               </li>
-              <li className="breadcrumb-item active" aria-current="page">Vía API</li>
+              <li className="breadcrumb-item active" aria-current="page">Cliente Oficial de Laravel</li>
             </ol>
           </nav> 
-          <h1>Vía API</h1>
+          <h1>Cliente Oficial de Laravel</h1>
+          <p>https://github.com/openai-php/laravel</p>
           
           <div className="card mt-4">
             
@@ -69,4 +67,4 @@ const API = () => {
   );
 };
 
-export default API;
+export default ClienteOficial1;

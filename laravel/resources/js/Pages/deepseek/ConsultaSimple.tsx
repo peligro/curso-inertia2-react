@@ -1,12 +1,10 @@
 import { Head, Link, usePage } from "@inertiajs/react";
-
 import { route } from "ziggy-js"; 
+
 import { InertiaPageProps } from "resources/js/Interfaces/OpenAIProps";
 import { formatTime } from "../../../js/Helpers/Helpers";
-// Definir la interfaz para las props de la página
 
-
-const API = () => {
+const ConsultaSimple = () => {
    const { props } = usePage<{ props: InertiaPageProps }>();
   const { respuesta, pregunta, tiempo } = props;
 
@@ -26,12 +24,12 @@ const API = () => {
                 <Link href={route('home_index')}><i className="fas fa-home"></i></Link>
               </li>
               <li className="breadcrumb-item">
-                <Link href={route('openai_index')}>Openai</Link>
+                <Link href={route('deepseek_index')}>Deepseek</Link>
               </li>
-              <li className="breadcrumb-item active" aria-current="page">Vía API</li>
+              <li className="breadcrumb-item active" aria-current="page">Consulta Simple</li>
             </ol>
           </nav> 
-          <h1>Vía API</h1>
+          <h1>Consulta Simple</h1>
           
           <div className="card mt-4">
             
@@ -69,4 +67,4 @@ const API = () => {
   );
 };
 
-export default API;
+export default ConsultaSimple;

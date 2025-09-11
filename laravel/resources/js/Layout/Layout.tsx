@@ -82,6 +82,10 @@ const Layout = ({ children }: LayoutPropsInterface) => {
                 <li className="nav-item">
                   <Link className={`nav-link ${currentPath === '/openai' ? 'active' : ''}`} aria-current="page" href={route('openai_index')}>Openai</Link>
                 </li>
+                <li className="nav-item">
+                  <Link className={`nav-link ${currentPath === '/deepseek' ? 'active' : ''}`} aria-current="page" href={route('deepseek_index')}>Deepseek</Link>
+                </li>
+                
 
                 <li className="nav-item">
                   <Link className={`nav-link `} method="post" aria-current="page" href={route('logout')}><i className="fas fa-lock"></i></Link>

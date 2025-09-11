@@ -13,30 +13,20 @@ const Home = () => {
               <li className="breadcrumb-item">
                 <Link href={route('home_index')}><i className="fas fa-home"></i></Link>
               </li>
-              <li className="breadcrumb-item active" aria-current="page">Openai</li>
+              <li className="breadcrumb-item active" aria-current="page">Deepseek</li>
             </ol>
           </nav> 
-          <h1>Openai</h1>
+          <h1>Deepseek</h1>
           
           <ul>
             <li>
-              <Link href={route('openai_api')}>Vía API</Link>
-            </li>
-            
-            <li>
-              <Link href={route('openai_chatbot_api')}>Chatbot API</Link>
+              <Link href={route('deepseek_api')}>Vía API</Link>
             </li>
             <li>
-              <Link href={route('openai_consulta_simple')}>Consulta simple</Link>
+              <Link href={route('deepseek_chatbot_api')}>Chatbot básico</Link>
             </li>
             <li>
-              <Link href={route('openai_cliente_oficial_1')}>Cliente oficial Laravel</Link>
-            </li>
-            <li>
-              <Link href={route('openai_cliente_oficial_2')}>Chatbot Cliente oficial Laravel</Link>
-            </li>
-            <li>
-              <Link href={route('openai_cliente_oficial_3')}>Generación de imagen con dall-e-3</Link>
+              <Link href={route('deepseek_consulta_simple')}>Consulta simple</Link>
             </li>
           </ul>
 
