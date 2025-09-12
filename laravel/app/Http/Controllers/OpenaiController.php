@@ -81,7 +81,7 @@ class OpenaiController extends Controller
         $tiempo = round(($endTime - $startTime) * 1000, 2); // Tiempo en milisegundos
         // Obtener la respuesta de la IA
         $respuestaIA = $respuesta->json()['choices'][0]['message']['content'] ?? 'No se recibió respuesta';
-         return Inertia::render('openai/ChatbotAPI', [
+        return Inertia::render('openai/ChatbotAPI', [
             'api_response' => [
                 'respuesta' => $respuestaIA,
                 'tiempo' => $tiempo,

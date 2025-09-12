@@ -21,6 +21,8 @@ use App\Http\Controllers\CerrarSesionController;
 
 use App\Http\Controllers\OpenaiController;
 use App\Http\Controllers\DeepseekController;
+use App\Http\Controllers\GeminiController;
+use App\Http\Controllers\HuggingFaceController;
 
 //use Illuminate\Support\Facades\Storage;
 //use Illuminate\Support\Facades\Response as ResponseStorage;
@@ -79,7 +81,23 @@ Route::middleware([Acceso::class ])->group(function () {
     Route::get('/deepseek/chatbot', [DeepseekController::class, 'deepseek_chatbot_api'])->name('deepseek_chatbot_api');
     Route::post('/deepseek/chatbot', [DeepseekController::class, 'deepseek_chatbot_api_post'])->name('deepseek_chatbot_api_post');
     Route::get('/deepseek/consulta-simple', [DeepseekController::class, 'deepseek_consulta_simple'])->name('deepseek_consulta_simple');
+
+    Route::get('/gemini', [GeminiController::class, 'gemini_index'])->name('gemini_index');
+    Route::get('/gemini/ejemplo-1', [GeminiController::class, 'gemini_ejemplo_1'])->name('gemini_ejemplo_1');
+    Route::get('/gemini/ejemplo-2-chatbot', [GeminiController::class, 'gemini_ejemplo_2_chatbot_api'])->name('gemini_ejemplo_2_chatbot_api');
+    Route::post('/gemini/ejemplo-2-chatbot', [GeminiController::class, 'gemini_ejemplo_2_chatbot_api_post'])->name('gemini_ejemplo_2_chatbot_api_post');
+    Route::get('/gemini/ejemplo-3-consulta', [GeminiController::class, 'gemini_ejemplo_3_consulta_simple'])->name('gemini_ejemplo_3_consulta_simple');
+    Route::get('/gemini/ejemplo-4-google-gemini-php', [GeminiController::class, 'gemini_ejemplo_4_google_gemini_php'])->name('gemini_ejemplo_4_google_gemini_php');
+    Route::get('/gemini/ejemplo-5-google-gemini-php-chatbot', [GeminiController::class, 'gemini_ejemplo_5_google_gemini_php'])->name('gemini_ejemplo_5_google_gemini_php');
+    Route::post('/gemini/ejemplo-5-google-gemini-php-chatbot', [GeminiController::class, 'gemini_ejemplo_5_google_gemini_php_post'])->name('gemini_ejemplo_5_google_gemini_php_post');
+    Route::get('/gemini/ejemplo-6-google-gemini-php-imagen', [GeminiController::class, 'gemini_ejemplo_6_google_gemini_php_imagen'])->name('gemini_ejemplo_6_google_gemini_php_imagen');
+    Route::post('/gemini/ejemplo-6-google-gemini-php-imagen', [GeminiController::class, 'gemini_ejemplo_6_google_gemini_php_imagen_post'])->name('gemini_ejemplo_6_google_gemini_php_imagen_post');
+    Route::get('/gemini/ejemplo-7-google-gemini-php-generacion-de-imagen', [GeminiController::class, 'gemini_ejemplo_7_google_gemini_php_generacion_de_imagen'])->name('gemini_ejemplo_7_google_gemini_php_generacion_de_imagen');
     
+    Route::get('/hugging-face', [HuggingFaceController::class, 'huggingface_index'])->name('huggingface_index');
+    Route::post('/hugging-face', [HuggingFaceController::class, 'huggingface_index_post'])->name('huggingface_index_post');
+    
+
     
 });
 

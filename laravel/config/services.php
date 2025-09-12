@@ -41,5 +41,13 @@ return [
         'key' => env('DEEPSEEK_API_KEY'),
         'url'=>env('DEEPSEEK_API_URL')
     ],
+    'gemini' => [
+        'key' => env('GEMINI_API_KEY'),
+        'url'=>env('GEMINI_BASE_URL')
+    ],
+    'huggingface' => [
+        'key' => env('HUGGING_FACE_TOKEN'),
+        'url'=>env('HUGGING_FACE_URL')
+    ]
 
 ];

@@ -22,6 +22,7 @@ export interface ApiResponse {
 export interface PageCustomProps extends PageProps {
     errors?: {
         pregunta?: string;
+        url?:string;
     };
     api_response?: ApiResponse;
     // Permitir otras propiedades dinámicas
