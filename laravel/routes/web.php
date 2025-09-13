@@ -22,7 +22,6 @@ use App\Http\Controllers\CerrarSesionController;
 use App\Http\Controllers\OpenaiController;
 use App\Http\Controllers\DeepseekController;
 use App\Http\Controllers\GeminiController;
-
 //use Illuminate\Support\Facades\Storage;
 //use Illuminate\Support\Facades\Response as ResponseStorage;
 
@@ -99,7 +98,8 @@ Route::middleware([Acceso::class ])->group(function () {
     Route::post('/gemini/ejemplo-6-google-gemini-php-imagen', [GeminiController::class, 'gemini_ejemplo_6_google_gemini_php_imagen_post'])->name('gemini_ejemplo_6_google_gemini_php_imagen_post');
     Route::get('/gemini/ejemplo-7-google-gemini-php-generacion-de-imagen', [GeminiController::class, 'gemini_ejemplo_7_google_gemini_php_generacion_de_imagen'])->name('gemini_ejemplo_7_google_gemini_php_generacion_de_imagen');
     
-   
+
+    
     
 
     
