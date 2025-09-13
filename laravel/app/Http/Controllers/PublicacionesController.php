@@ -56,7 +56,7 @@ class PublicacionesController extends Controller
             } catch (\Exception $e) {
                 return redirect()->back()->withErrors(['foto' => 'Error al subir la imagen: ' . $e->getMessage()])->withInput();
             }
-            // Guardar la URL de S3
+            
                 $publicacion = new Publicaciones();
                 $publicacion->categorias_id = $request->categoria_id;
                 $publicacion->nombre = $request->nombre;

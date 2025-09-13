@@ -36,7 +36,10 @@ const Home = () => {
               <Link href={route('openai_cliente_oficial_2')}>Chatbot Cliente oficial Laravel</Link>
             </li>
             <li>
-              <Link href={route('openai_cliente_oficial_3')}>Generación de imagen con dall-e-3</Link>
+              <Link href={route('openai_cliente_oficial_3')}>Generación de imagen con Cliente oficial de Laravel y dall-e-3I</Link>
+            </li>
+            <li>
+              <Link href={route('openai_cliente_oficial_4_crear_publicacion')}>Crear publicación con Cliente oficial de Laravel y dall-e-3I</Link>
             </li>
           </ul>
 

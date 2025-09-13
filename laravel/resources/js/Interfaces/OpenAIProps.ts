@@ -17,14 +17,36 @@ export interface ApiResponse {
     tiempo: number;
     pregunta_enviada: string;
 }
-
+export interface PublicacionLinkedinResponse {
+  pregunta_enviada: string;
+  titulo: string;
+  texto: string;
+  imagen_url: string;
+  success: boolean;
+  error: string | null;
+  tiempo: number;
+}
 // Extender PageProps para incluir la firma de índice
 export interface PageCustomProps extends PageProps {
     errors?: {
         pregunta?: string;
-        url?:string;
+        url?:string; 
     };
     api_response?: ApiResponse;
+    // Permitir otras propiedades dinámicas
+    [key: string]: any;
+}
+export interface PageCustomLinkedinProps extends PageProps {
+    errors?: {
+        pregunta?: string;
+        url?:string; 
+    };
+    flash?: {
+        success?: string;
+        css?: string;
+        mensaje?: string;
+    };
+    api_response?: PublicacionLinkedinResponse;
     // Permitir otras propiedades dinámicas
     [key: string]: any;
 }

@@ -22,7 +22,6 @@ use App\Http\Controllers\CerrarSesionController;
 use App\Http\Controllers\OpenaiController;
 use App\Http\Controllers\DeepseekController;
 use App\Http\Controllers\GeminiController;
-use App\Http\Controllers\HuggingFaceController;
 
 //use Illuminate\Support\Facades\Storage;
 //use Illuminate\Support\Facades\Response as ResponseStorage;
@@ -75,6 +74,12 @@ Route::middleware([Acceso::class ])->group(function () {
     Route::get('/openiai/cliente-oficial2', [OpenaiController::class, 'openai_cliente_oficial_2'])->name('openai_cliente_oficial_2');
     Route::post('/openiai/cliente-oficial2', [OpenaiController::class, 'openai_cliente_oficial_2_post'])->name('openai_cliente_oficial_2_post');
     Route::get('/openiai/cliente-oficial3', [OpenaiController::class, 'openai_cliente_oficial_3'])->name('openai_cliente_oficial_3');
+    Route::post('/openiai/cliente-oficial3', [OpenaiController::class, 'openai_cliente_oficial_3_post'])->name('openai_cliente_oficial_3_post');
+    Route::get('/openiai/cliente-oficial4', [OpenaiController::class, 'openai_cliente_oficial_4_crear_publicacion'])->name('openai_cliente_oficial_4_crear_publicacion');
+    Route::post('/openiai/cliente-oficial4', [OpenaiController::class, 'openai_cliente_oficial_4_crear_publicacion_post'])->name('openai_cliente_oficial_4_crear_publicacion_post');
+    Route::post('/openiai/cliente-oficial4-save', [OpenaiController::class, 'openai_cliente_oficial_4_crear_publicacion_save_post'])->name('openai_cliente_oficial_4_crear_publicacion_save_post');
+    
+
     
     Route::get('/deepseek', [DeepseekController::class, 'deepseek_index'])->name('deepseek_index');
     Route::get('/deepseek/api', [DeepseekController::class, 'deepseek_api'])->name('deepseek_api');
@@ -94,8 +99,7 @@ Route::middleware([Acceso::class ])->group(function () {
     Route::post('/gemini/ejemplo-6-google-gemini-php-imagen', [GeminiController::class, 'gemini_ejemplo_6_google_gemini_php_imagen_post'])->name('gemini_ejemplo_6_google_gemini_php_imagen_post');
     Route::get('/gemini/ejemplo-7-google-gemini-php-generacion-de-imagen', [GeminiController::class, 'gemini_ejemplo_7_google_gemini_php_generacion_de_imagen'])->name('gemini_ejemplo_7_google_gemini_php_generacion_de_imagen');
     
-    Route::get('/hugging-face', [HuggingFaceController::class, 'huggingface_index'])->name('huggingface_index');
-    Route::post('/hugging-face', [HuggingFaceController::class, 'huggingface_index_post'])->name('huggingface_index_post');
+   
     
 
     
