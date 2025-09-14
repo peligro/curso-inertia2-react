@@ -230,16 +230,14 @@ class OpenaiController extends Controller
     }
     public function openai_cliente_oficial_3_post(Request $request)
     {
-        $request->validate(
-            [
-                'pregunta' => 'required|string|min:5'
-            ],
-            [
-                'pregunta.required' => 'El campo pregunta es obligatorio',
-                'pregunta.min' => 'La pregutna debe tener al menos 5 caracteres',
-                'pregunta.string' => 'La pregunta debe ser un texto',
-            ]
-        );
+        $request->validate([
+            'pregunta' => 'required|string|min:5'
+        ], [
+            'pregunta.required' => 'El campo pregunta es obligatorio',
+            'pregunta.min' => 'La pregunta debe tener al menos 5 caracteres',
+            'pregunta.string' => 'La pregunta debe ser un texto',
+        ]);
+
         $startTime = microtime(true); 
 
         try {
@@ -257,25 +255,28 @@ class OpenaiController extends Controller
                 throw new Exception('URL de imagen no válida');
             }
             
-            // Descargar la imagen directamente a un resource temporal
-            $imageContent = file_get_contents($imageUrl);
-            if ($imageContent === false) {
-                throw new Exception('No se pudo descargar la imagen');
-            }
+            // Usar Guzzle/Http con headers de navegador
+            $imageContent = Http::withHeaders([
+                'User-Agent' => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+                'Accept' => 'image/webp,image/apng,image/*,*/*;q=0.8',
+                'Accept-Language' => 'en-US,en;q=0.9',
+                'Referer' => 'https://platform.openai.com/',
+            ])->timeout(30)->get($imageUrl)->body();
             
+             
+            
+            if (empty($imageContent)) {
+                throw new Exception('No se pudo descargar la imagen (contenido vacío)');
+            }
             
             $fileName = 'publicaciones/dalle_' . uniqid() . '.png';
             Storage::disk('s3')->put($fileName, $imageContent, 'public');
             
-            // Obtener path 
-            $s3Path = $fileName; // 'dalle/dalle_68c332d2b3307.png'
-            
-            
+            $s3Path = $fileName;
             $success = true;
             $error = null;
 
         } catch (\Exception $e) {
-           
             $s3Path = null;
             $success = false;
             $error = 'Error: ' . $e->getMessage(); 
@@ -291,7 +292,6 @@ class OpenaiController extends Controller
                 'pregunta_enviada' => $request->pregunta
             ]
         ]);
-         
     }
     public function openai_cliente_oficial_4_crear_publicacion()
     {
