@@ -247,6 +247,63 @@ class OpenaiController extends Controller
                 'size' => '1024x1024',
                 'quality' => 'standard',
                 'n' => 1,
+                'response_format' => 'b64_json' // ← Esto es crucial
+            ]);
+
+            // Verificar si tenemos la imagen en base64
+            if (isset($response->data[0]->b64_json)) {
+                $imageContent = base64_decode($response->data[0]->b64_json);
+            } else {
+                throw new Exception('OpenAI no devolvió la imagen en formato base64');
+            }
+            
+            if (empty($imageContent)) {
+                throw new Exception('No se pudo decodificar la imagen base64');
+            }
+            
+            $fileName = 'publicaciones/dalle_' . uniqid() . '.png';
+            Storage::disk('s3')->put($fileName, $imageContent, 'public');
+            
+            $s3Path = $fileName;
+            $success = true;
+            $error = null;
+
+        } catch (\Exception $e) {
+            $s3Path = null;
+            $success = false;
+            $error = 'Error: ' . $e->getMessage(); 
+        }
+        
+        $endTime = microtime(true);
+        $tiempo = round(($endTime - $startTime) * 1000, 2);
+
+        return Inertia::render('openai/ClienteOficial3', [
+            'api_response' => [
+                'respuesta' => $s3Path,
+                'tiempo' => $tiempo,
+                'pregunta_enviada' => $request->pregunta
+            ]
+        ]);
+    }
+    public function __openai_cliente_oficial_3_post(Request $request)
+    {
+        $request->validate([
+            'pregunta' => 'required|string|min:5'
+        ], [
+            'pregunta.required' => 'El campo pregunta es obligatorio',
+            'pregunta.min' => 'La pregunta debe tener al menos 5 caracteres',
+            'pregunta.string' => 'La pregunta debe ser un texto',
+        ]);
+
+        $startTime = microtime(true); 
+
+        try {
+            $response = OpenAI::images()->create([
+                'model' => 'dall-e-3',
+                'prompt' => $request->pregunta,
+                'size' => '1024x1024',
+                'quality' => 'standard',
+                'n' => 1,
             ]);
 
             $imageUrl = $response->data[0]->url;
