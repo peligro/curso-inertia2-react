@@ -236,11 +236,15 @@ class OpenaiController extends Controller
             ],
             [
                 'pregunta.required' => 'El campo pregunta es obligatorio',
-                'pregunta.min' => 'La pregutna debe tener al menos 5 caracteres',
+                'pregunta.min' => 'La pregunta debe tener al menos 5 caracteres',
                 'pregunta.string' => 'La pregunta debe ser un texto',
             ]
         );
+        
         $startTime = microtime(true); 
+        $s3Path = null;
+        $success = false;
+        $error = null;
 
         try {
             $response = OpenAI::images()->create([
@@ -249,36 +253,44 @@ class OpenaiController extends Controller
                 'size' => '1024x1024',
                 'quality' => 'standard',
                 'n' => 1,
+                'response_format' => 'b64_json' // ← FORMATO BASE64
             ]);
 
-            $imageUrl = $response->data[0]->url;
+            // Obtener la imagen en base64 y decodificarla
+            $base64Image = $response->data[0]->b64_json;
             
-            if (!filter_var($imageUrl, FILTER_VALIDATE_URL)) {
-                throw new Exception('URL de imagen no válida');
+            if (empty($base64Image)) {
+                throw new Exception('No se recibió la imagen en formato base64');
             }
             
-            // Descargar la imagen directamente a un resource temporal
-            $imageContent = file_get_contents($imageUrl);
+            $imageContent = base64_decode($base64Image);
+            
             if ($imageContent === false) {
-                throw new Exception('No se pudo descargar la imagen');
+                throw new Exception('No se pudo decodificar la imagen base64');
             }
             
+            // Verificar que el contenido no esté vacío
+            if (strlen($imageContent) === 0) {
+                throw new Exception('La imagen decodificada está vacía');
+            }
             
             $fileName = 'publicaciones/dalle_' . uniqid() . '.png';
             Storage::disk('s3')->put($fileName, $imageContent, 'public');
             
-            // Obtener path 
-            $s3Path = $fileName; // 'dalle/dalle_68c332d2b3307.png'
+            // Verificar que se subió correctamente
+            if (!Storage::disk('s3')->exists($fileName)) {
+                throw new Exception('No se pudo guardar la imagen en S3');
+            }
             
-            
+            $s3Path = $fileName;
             $success = true;
-            $error = null;
 
         } catch (\Exception $e) {
-           
-            $s3Path = null;
-            $success = false;
-            $error = 'Error: ' . $e->getMessage(); 
+            $error = 'Error: ' . $e->getMessage();
+            Log::error('Error en openai_cliente_oficial_3_post', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
         }
         
         $endTime = microtime(true);
@@ -288,10 +300,11 @@ class OpenaiController extends Controller
             'api_response' => [
                 'respuesta' => $s3Path,
                 'tiempo' => $tiempo,
-                'pregunta_enviada' => $request->pregunta
+                'pregunta_enviada' => $request->pregunta,
+                'success' => $success,
+                'error' => $error
             ]
         ]);
-         
     }
     public function openai_cliente_oficial_4_crear_publicacion()
     {

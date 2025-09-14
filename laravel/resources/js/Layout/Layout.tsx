@@ -83,6 +83,9 @@ const Layout = ({ children }: LayoutPropsInterface) => {
                       <li><Link className="dropdown-item" href={route('usuarios_index')}>Usuarios</Link></li>
                     </ul>
                   </li>
+                  </>
+                )}
+               
                    <li className="nav-item dropdown">
                   <a className="nav-link dropdown-toggle" href="#" id="navbarDropdownIA" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Inteligencia Artificial
@@ -94,9 +97,6 @@ const Layout = ({ children }: LayoutPropsInterface) => {
                      
                   </ul>
                 </li>
-                  </>
-                )}
-               
               </ul>
               <ul className="navbar-nav">
                 {isAuthenticated ? (
