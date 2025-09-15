@@ -44,6 +44,9 @@ return [
     'gemini' => [
         'key' => env('GEMINI_API_KEY'),
         'url'=>env('GEMINI_BASE_URL')
+    ],
+    'aws_parametros' => [
+        'aws_bucket' => env('AWS_BUCKET'),
     ]
 
 ];

@@ -33,6 +33,7 @@ export interface PageCustomProps extends PageProps {
         url?:string; 
     };
     api_response?: ApiResponse;
+    aws_bucket?:string;
     // Permitir otras propiedades dinámicas
     [key: string]: any;
 }

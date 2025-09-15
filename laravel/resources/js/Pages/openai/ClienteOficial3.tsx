@@ -7,8 +7,8 @@ import { PageCustomProps } from "resources/js/Interfaces/OpenAIProps";
 
 const ClienteOficial3 = () => {
     // Obtener props de la página
-    const { errors, api_response } = usePage<PageCustomProps>().props;
-    
+    const { errors, api_response, aws_bucket } = usePage<PageCustomProps>().props;
+   
     // Estados locales
     const [respuesta, setRespuesta] = useState('');
     const [tiempo, setTiempo] = useState(0);
@@ -112,7 +112,7 @@ const ClienteOficial3 = () => {
                                     )}
                                 </div>
                                 <div className="card-body">
-                                   <img src={`/s3/curso-udemy/${respuesta}`} alt="" width="50%" />
+                                   <img src={`/s3/${aws_bucket}/${respuesta}`} alt="" width="50%" />
                                 </div>
                             </>
                         )}

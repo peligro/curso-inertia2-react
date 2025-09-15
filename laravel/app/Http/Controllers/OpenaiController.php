@@ -227,7 +227,7 @@ class OpenaiController extends Controller
     }
     public function openai_cliente_oficial_3()
     {
-        return Inertia::render('openai/ClienteOficial3');
+        return Inertia::render('openai/ClienteOficial3', ['aws_bucket'=>config('services.aws_parametros.aws_bucket')]);
     }
     public function openai_cliente_oficial_3_post(Request $request)
     {
@@ -307,7 +307,8 @@ class OpenaiController extends Controller
                 'respuesta' => $s3Path,
                 'tiempo' => $tiempo,
                 'pregunta_enviada' => $request->pregunta,
-            ]
+            ],
+            'aws_bucket'=>config('services.aws_parametros.aws_bucket')
         ]);
     }
 
