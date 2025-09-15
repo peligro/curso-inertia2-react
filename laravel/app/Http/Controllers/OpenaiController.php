@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\UploadedFile;
+use Illuminate\Http\File;
 //cliente oficial
 use OpenAI\Laravel\Facades\OpenAI;
 
@@ -229,7 +229,7 @@ class OpenaiController extends Controller
     {
         return Inertia::render('openai/ClienteOficial3');
     }
-   public function openai_cliente_oficial_3_post(Request $request)
+    public function openai_cliente_oficial_3_post(Request $request)
     {
         $request->validate([
             'pregunta' => 'required|string|min:5'
@@ -271,7 +271,8 @@ class OpenaiController extends Controller
 
             if ($imageContent === false || $httpCode !== 200 || strlen($imageContent) === 0) {
                 return redirect()->route('openai_cliente_oficial_3')->with([
-                    'css'=>'danger','success' => "❌ Error al descargar la imagen: {$curlError} (HTTP {$httpCode})"
+                    'css' => 'danger',
+                    'success' => "❌ Error al descargar la imagen: {$curlError} (HTTP {$httpCode})"
                 ]);
             }
 
@@ -279,21 +280,19 @@ class OpenaiController extends Controller
             $localPath = base_path("temporal/{$filename}");
             file_put_contents($localPath, $imageContent);
 
-            $fakeFile = new UploadedFile(
-                $localPath,
-                $filename,
-                'image/png',
-                null,
-                true
-            );
+            // Verificar que el archivo se guardó correctamente
+            if (!file_exists($localPath) || !is_readable($localPath)) {
+                throw new \Exception("El archivo temporal no se pudo guardar o no es legible: {$localPath}");
+            }
 
-            $s3Path = $fakeFile->store('publicaciones', 's3');
+            // Subir a S3 usando File
+            $s3Path = Storage::disk('s3')->putFile('publicaciones', new File($localPath), 'public');
 
         } catch (\Exception $e) {
             return redirect()->route('openai_cliente_oficial_3')->with([
-                    'css'=>'danger','success' => 'Error: ' . $e->getMessage()
-                ]);
-            $error = 'Error: ' . $e->getMessage();
+                'css' => 'danger',
+                'success' => 'Error: ' . $e->getMessage()
+            ]);
         } finally {
             if ($localPath && file_exists($localPath)) {
                 unlink($localPath);
@@ -307,7 +306,7 @@ class OpenaiController extends Controller
             'api_response' => [
                 'respuesta' => $s3Path,
                 'tiempo' => $tiempo,
-                'pregunta_enviada' => $request->pregunta, 
+                'pregunta_enviada' => $request->pregunta,
             ]
         ]);
     }
