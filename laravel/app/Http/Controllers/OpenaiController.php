@@ -276,7 +276,7 @@ class OpenaiController extends Controller
             }
 
             $filename = 'dalle_' . uniqid() . '.png';
-            $localPath = base_path("tmp/{$filename}");
+            $localPath = base_path("temporal/{$filename}");
             file_put_contents($localPath, $imageContent);
 
             $fakeFile = new UploadedFile(

@@ -56,10 +56,10 @@ const ClienteOficial3 = () => {
                             <li className="breadcrumb-item">
                                 <Link href={route('openai_index')}>Openai</Link>
                             </li>
-                            <li className="breadcrumb-item active" aria-current="page">Generación de imagen con Cliente oficial de Laravel y dall-e-3I</li>
+                            <li className="breadcrumb-item active" aria-current="page">Generación de imagen con Cliente oficial de Laravel y dall-e-3</li>
                         </ol>
                     </nav> 
-                    <h1>Generación de imagen con Cliente oficial de Laravel y dall-e-3I</h1>
+                    <h1>Generación de imagen con Cliente oficial de Laravel y dall-e-3</h1>
                     
                     <div className="card mt-4">
                         <div className="card-header">
