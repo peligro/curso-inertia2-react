@@ -6,7 +6,7 @@ services:
     working_dir: /var/www/html
     volumes:
       - ./laravel:/var/www/html
-      - ./laravel/tmp:/tmp
+      - ./laravel/temporal:/temporal
     environment:
       - APP_ENV=local
       - APP_DEBUG=true
