@@ -277,7 +277,7 @@ class OpenaiController extends Controller
             }
 
             $filename = 'dalle_' . uniqid() . '.png';
-            $localPath = base_path("temporal/{$filename}");
+            $localPath = storage_path("{$filename}");
             file_put_contents($localPath, $imageContent);
 
             // Verificar que el archivo se guardó correctamente
