@@ -16,6 +16,7 @@ export interface ApiResponse {
     respuesta: string;
     tiempo: number;
     pregunta_enviada: string;
+    url?:string;
 }
 export interface PublicacionLinkedinResponse {
   pregunta_enviada: string;
@@ -31,6 +32,11 @@ export interface PageCustomProps extends PageProps {
     errors?: {
         pregunta?: string;
         url?:string; 
+    };
+    flash?: {
+        success?: string;
+        css?: string;
+        mensaje?: string;
     };
     api_response?: ApiResponse;
     aws_bucket?:string;

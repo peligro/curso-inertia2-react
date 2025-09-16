@@ -3,20 +3,22 @@ import { route } from "ziggy-js";
 import { Form } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { PageCustomProps } from "resources/js/Interfaces/OpenAIProps";
+import MensajesFlash from "../../../js/componentes/MensajesFlash";
 
 
 const ClienteOficial3 = () => {
     // Obtener props de la página
-    const { errors, api_response, aws_bucket } = usePage<PageCustomProps>().props;
+    const { errors, api_response, aws_bucket, flash } = usePage<PageCustomProps>().props;
    
     // Estados locales
     const [respuesta, setRespuesta] = useState('');
     const [tiempo, setTiempo] = useState(0);
     const [preguntaEnviada, setPreguntaEnviada] = useState('');
+    const [url, setUrl] = useState('');
 
     // Form handler
     const { data, setData, post, processing } = useForm({
-        pregunta: '',
+        pregunta: 'yoda bebiendo coca cola',
     });
 
     // Actualizamos estado de la respuesta con useEffect
@@ -25,6 +27,7 @@ const ClienteOficial3 = () => {
             setRespuesta(api_response.respuesta);
             setTiempo(api_response.tiempo);
             setPreguntaEnviada(api_response.pregunta_enviada);
+            setUrl(`${api_response.url}` );
         }
     }, [api_response]);
 
@@ -59,6 +62,7 @@ const ClienteOficial3 = () => {
                             <li className="breadcrumb-item active" aria-current="page">Generación de imagen con Cliente oficial de Laravel y dall-e-3</li>
                         </ol>
                     </nav> 
+                    <MensajesFlash flash={flash} />
                     <h1>Generación de imagen con Cliente oficial de Laravel y dall-e-3</h1>
                     
                     <div className="card mt-4">
@@ -107,7 +111,7 @@ const ClienteOficial3 = () => {
                                     <h5>Se tomó {tiempo} ms</h5>
                                     {preguntaEnviada && (
                                         <small className="text-muted">
-                                            Pregunta: "{preguntaEnviada}"
+                                            Pregunta: "{preguntaEnviada}" | URL: {url}
                                         </small>
                                     )}
                                 </div>

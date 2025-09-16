@@ -310,6 +310,7 @@ class OpenaiController extends Controller
                 'respuesta' => $s3Path,
                 'tiempo' => $tiempo,
                 'pregunta_enviada' => $request->pregunta,
+                'url'=>$imageUrl
             ],
             'aws_bucket'=>config('services.aws_parametros.aws_bucket')
         ]);
