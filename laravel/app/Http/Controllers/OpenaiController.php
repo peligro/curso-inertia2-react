@@ -282,7 +282,10 @@ class OpenaiController extends Controller
 
             // Verificar que el archivo se guardó correctamente
             if (!file_exists($localPath) || !is_readable($localPath)) {
-                throw new \Exception("El archivo temporal no se pudo guardar o no es legible: {$localPath}");
+                return redirect()->route('openai_cliente_oficial_3')->with([
+                    'css' => 'danger',
+                    'success' => "El archivo temporal no se pudo guardar o no es legible: {$localPath}"
+                ]); 
             }
 
             // Subir a S3 usando File
