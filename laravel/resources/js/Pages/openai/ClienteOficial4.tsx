@@ -10,7 +10,7 @@ import MensajesFlash from "../../../js/componentes/MensajesFlash";
 const ClienteOficial4 = () => {
     // Obtener props de la página
     const { errors, api_response, flash } = usePage<PageCustomLinkedinProps>().props;
-    
+   
     // Estados locales
     const [publicacion, setPublicacion] = useState({
         titulo: '',
@@ -18,7 +18,7 @@ const ClienteOficial4 = () => {
         imagen_url: '',
         tiempo: 0,
         pregunta_enviada: '',
-        success: false
+        success: false, 
     });
 
     // Estado para los campos editables
@@ -164,11 +164,11 @@ const ClienteOficial4 = () => {
                             <li className="breadcrumb-item">
                                 <Link href={route('openai_index')}>Openai</Link>
                             </li>
-                            <li className="breadcrumb-item active" aria-current="page">Crear publicación con Cliente oficial de Laravel y dall-e-3I</li>
+                            <li className="breadcrumb-item active" aria-current="page">Crear publicación con Cliente oficial de Laravel y dall-e-3</li>
                         </ol>
                     </nav> 
                     <MensajesFlash flash={flash} />
-                    <h1>Crear publicación con Cliente oficial de Laravel y dall-e-3I</h1>
+                    <h1>Crear publicación con Cliente oficial de Laravel y dall-e-3</h1>
                     
                     <div className="card mt-4">
                         <div className="card-header">
@@ -216,7 +216,8 @@ const ClienteOficial4 = () => {
                                     <h5>Se tomó {publicacion.tiempo} ms</h5>
                                     {publicacion.pregunta_enviada && (
                                         <small className="text-muted">
-                                            Prompt: "{publicacion.pregunta_enviada}"
+                                            Prompt: "{publicacion.pregunta_enviada}" 
+                                            <br/> URL: {api_response?.url}
                                         </small>
                                     )}
                                 </div>

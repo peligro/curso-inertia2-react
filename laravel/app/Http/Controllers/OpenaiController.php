@@ -232,8 +232,6 @@ class OpenaiController extends Controller
     {
         return Inertia::render('openai/ClienteOficial3', ['aws_bucket'=>config('services.aws_parametros.aws_bucket')]);
     }
-     
-
     public function openai_cliente_oficial_3_post(Request $request)
     {
         $request->validate([
@@ -388,6 +386,144 @@ class OpenaiController extends Controller
         return Inertia::render('openai/ClienteOficial4');
     }
     public function openai_cliente_oficial_4_crear_publicacion_post(Request $request)
+    {
+         $request->validate([
+        'pregunta' => 'required|string|min:5'
+        ], [
+            'pregunta.required' => 'El campo pregunta es obligatorio',
+            'pregunta.min' => 'La pregunta debe tener al menos 5 caracteres',
+            'pregunta.string' => 'La pregunta debe ser un texto',
+        ]);
+
+        $startTime = microtime(true);
+        
+        $resultado = [
+            'tiempo' => null,
+            'pregunta_enviada'=>null,
+            'titulo' => null,
+            'texto' => null,
+            'imagen_url' => null,
+            'success' => false,
+            'error' => null,
+            'tiempo_total' => 0 
+        ];
+
+        try {
+            // 1. PRIMERO: Generar el contenido textual (título + artículo)
+            $promptContenido = "Como experto en marketing digital y creación de contenido para LinkedIn, genera:
+            
+            1. UN TÍTULO atractivo (máximo 10 palabras)
+            2. UN TEXTO para publicación en LinkedIn (máximo 300 palabras) sobre: {$request->pregunta}
+            
+            Formato de respuesta:
+            TÍTULO: [aquí el título]
+            TEXTO: [aquí el texto completo]";
+
+            $responseContenido = OpenAI::chat()->create([
+                'model' => 'gpt-3.5-turbo',
+                'messages' => [
+                    ['role' => 'user', 'content' => $promptContenido],
+                ],
+                'temperature' => 0.7,
+                'max_tokens' => 800,
+            ]);
+
+            $contenidoCompleto = $responseContenido->choices[0]->message->content;
+            
+            // Extraer título y texto
+            $lineas = explode("\n", $contenidoCompleto);
+            $titulo = '';
+            $texto = '';
+            $enTexto = false;
+
+            foreach ($lineas as $linea) {
+                if (str_starts_with($linea, 'TÍTULO:')) {
+                    $titulo = trim(str_replace('TÍTULO:', '', $linea));
+                } elseif (str_starts_with($linea, 'TEXTO:')) {
+                    $texto = trim(str_replace('TEXTO:', '', $linea));
+                    $enTexto = true;
+                } elseif ($enTexto) {
+                    $texto .= "\n" . trim($linea);
+                }
+            }
+
+            // 2. SEGUNDO: Generar imagen con DALL-E 3 basada en el título
+            $promptImagen = "Crea una imagen profesional para LinkedIn sobre: {$titulo}. 
+            Estilo profesional, corporativo, adecuado para redes sociales profesionales";
+
+            $responseImagen = OpenAI::images()->create([
+                'model' => 'dall-e-3',
+                'prompt' => $promptImagen,
+                'size' => '1024x1024',
+                'quality' => 'standard',
+                'n' => 1,
+            ]);
+
+            $imageUrl = $responseImagen->data[0]->url;
+            
+            // Descargar la imagen
+            $ch = curl_init();
+            curl_setopt_array($ch, [
+                CURLOPT_URL => $imageUrl,
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_TIMEOUT => 30,
+                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_SSL_VERIFYHOST => false,
+            ]);
+            
+            $imageContent = curl_exec($ch);
+            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
+            
+            if ($imageContent === false || $httpCode !== 200) {
+                throw new Exception("Error al descargar imagen (HTTP {$httpCode})");
+            }
+            
+            // Crear archivo temporal
+            $tempFilePath = tempnam(sys_get_temp_dir(), 'dalle_');
+            file_put_contents($tempFilePath, $imageContent);
+            
+            // Crear UploadedFile
+            $uploadedFile = new UploadedFile(
+                $tempFilePath,
+                'dalle_image.png',
+                'image/png',
+                null,
+                true
+            );
+            
+            // Subir a S3 (igual que tu otro módulo)
+            $s3Path = $uploadedFile->store('publicaciones', 's3');
+            
+            // Limpiar
+            unlink($tempFilePath);
+
+            // Preparar resultado final
+            $resultado = [
+                'pregunta_enviada'=>$request->pregunta,
+                'titulo' => $titulo,
+                'texto' => $texto,
+                'imagen_url' => $s3Path,
+                'success' => true,
+                'error' => null
+            ];
+
+        } catch (\Exception $e) {
+            $resultado['error'] = 'Error: ' . $e->getMessage();
+            $resultado['success'] = false;
+        }
+
+        $endTime = microtime(true);
+        $resultado['tiempo'] = round(($endTime - $startTime) * 1000, 2);
+        $resultado['url'] = $imageUrl;
+        return Inertia::render('openai/ClienteOficial4', [
+            'api_response' => $resultado,
+            'pregunta_enviada' => $request->pregunta,
+            'aws_bucket' => config('services.aws_parametros.aws_bucket')
+        ]);
+    }
+    public function __openai_cliente_oficial_4_crear_publicacion_post(Request $request)
     {
          $request->validate([
         'pregunta' => 'required|string|min:5'

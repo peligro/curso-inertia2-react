@@ -26,6 +26,7 @@ export interface PublicacionLinkedinResponse {
   success: boolean;
   error: string | null;
   tiempo: number;
+  url?:string;
 }
 // Extender PageProps para incluir la firma de índice
 export interface PageCustomProps extends PageProps {
