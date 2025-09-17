@@ -6,7 +6,10 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Http\File;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Http\UploadedFile;
+use Exception;
+
 //cliente oficial
 use OpenAI\Laravel\Facades\OpenAI;
 
@@ -229,93 +232,92 @@ class OpenaiController extends Controller
     {
         return Inertia::render('openai/ClienteOficial3', ['aws_bucket'=>config('services.aws_parametros.aws_bucket')]);
     }
+     
+
     public function openai_cliente_oficial_3_post(Request $request)
-    {
-        $request->validate([
-            'pregunta' => 'required|string|min:5'
-        ], [
-            'pregunta.required' => 'El campo pregunta es obligatorio',
-            'pregunta.min' => 'La pregunta debe tener al menos 5 caracteres',
-            'pregunta.string' => 'La pregunta debe ser un texto',
+{
+    $request->validate([
+        'pregunta' => 'required|string|min:5'
+    ]);
+    
+    $startTime = microtime(true); 
+    $s3Path = null;
+    $error = null;
+    $imageUrl = null;
+
+    try {
+        // Generar imagen con DALL-E
+        $response = OpenAI::images()->create([
+            'model' => 'dall-e-3',
+            'prompt' => $request->pregunta,
+            'size' => '1024x1024',
+            'quality' => 'standard',
+            'n' => 1,
         ]);
 
-        $startTime = microtime(true);
-        $s3Path = null;
-        $error = null;
-        $localPath = null;
-
-        try {
-            $response = OpenAI::images()->create([
-                'model' => 'dall-e-3',
-                'prompt' => $request->pregunta,
-                'size' => '1024x1024',
-                'quality' => 'standard',
-                'n' => 1,
-            ]);
-
-            $imageUrl = $response->data[0]->url;
-
-            $ch = curl_init($imageUrl);
-            curl_setopt_array($ch, [
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_TIMEOUT => 30,
-                CURLOPT_SSL_VERIFYPEER => true,
-                CURLOPT_HTTPHEADER => ['Accept: image/png'],
-            ]);
-
-            $imageContent = curl_exec($ch);
-            $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            $curlError = curl_error($ch);
-            curl_close($ch);
-
-            if ($imageContent === false || $httpCode !== 200 || strlen($imageContent) === 0) {
-                return redirect()->route('openai_cliente_oficial_3')->with([
-                    'css' => 'danger',
-                    'success' => "❌ Error al descargar la imagen: {$curlError} (HTTP {$httpCode})"
-                ]);
-            }
-
-            $filename = 'dalle_' . uniqid() . '.png';
-            $localPath = storage_path("{$filename}");
-            file_put_contents($localPath, $imageContent);
-
-            // Verificar que el archivo se guardó correctamente
-            if (!file_exists($localPath) || !is_readable($localPath)) {
-                return redirect()->route('openai_cliente_oficial_3')->with([
-                    'css' => 'danger',
-                    'success' => "El archivo temporal no se pudo guardar o no es legible: {$localPath}"
-                ]); 
-            }
-
-            // Subir a S3 usando File
-            $s3Path = Storage::disk('s3')->putFile('publicaciones', new File($localPath), 'public');
-
-        } catch (\Exception $e) {
-            return redirect()->route('openai_cliente_oficial_3')->with([
-                'css' => 'danger',
-                'success' => 'Error: ' . $e->getMessage()
-            ]);
-        } finally {
-            if ($localPath && file_exists($localPath)) {
-                unlink($localPath);
-            }
+        $imageUrl = $response->data[0]->url;
+        
+        // Descargar la imagen
+        $ch = curl_init();
+        curl_setopt_array($ch, [
+            CURLOPT_URL => $imageUrl,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false,
+        ]);
+        
+        $imageContent = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        curl_close($ch);
+        
+        if ($imageContent === false || $httpCode !== 200) {
+            throw new Exception("Error al descargar imagen (HTTP {$httpCode})");
         }
+        
+        // Crear archivo temporal
+        $tempFilePath = tempnam(sys_get_temp_dir(), 'dalle_');
+        file_put_contents($tempFilePath, $imageContent);
+        
+        // Crear UploadedFile
+        $uploadedFile = new UploadedFile(
+            $tempFilePath,
+            'dalle_image.png',
+            'image/png',
+            null,
+            true
+        );
+        
+        // Subir a S3 (igual que tu otro módulo)
+        $s3Path = $uploadedFile->store('publicaciones', 's3');
+        
+        // Limpiar
+        unlink($tempFilePath);
 
-        $endTime = microtime(true);
-        $tiempo = round(($endTime - $startTime) * 1000, 2);
+    } catch (\Exception $e) {
+        $error = 'Error: ' . $e->getMessage();
+        
+        // Clean up
+        if (isset($tempFilePath) && file_exists($tempFilePath)) {
+            unlink($tempFilePath);
+        }
+    } 
+    
+    $endTime = microtime(true);
+    $tiempo = round(($endTime - $startTime) * 1000, 2);
 
-        return Inertia::render('openai/ClienteOficial3', [
-            'api_response' => [
-                'respuesta' => $s3Path,
-                'tiempo' => $tiempo,
-                'pregunta_enviada' => $request->pregunta,
-                'url'=>$imageUrl
-            ],
-            'aws_bucket'=>config('services.aws_parametros.aws_bucket')
-        ]);
-    }
-
+    return Inertia::render('openai/ClienteOficial3', [
+        'api_response' => [
+            'respuesta' => $s3Path,
+            'tiempo' => $tiempo,
+            'pregunta_enviada' => $request->pregunta,
+            'error' => $error,
+            'url' => $imageUrl
+        ],
+        'aws_bucket' => config('services.aws_parametros.aws_bucket')
+    ]);
+}
     public function __openai_cliente_oficial_3_post(Request $request)
     {
         $request->validate(
@@ -367,8 +369,7 @@ class OpenaiController extends Controller
             $s3Path = null;
             $success = false;
             $error = 'Error: ' . $e->getMessage(); 
-        }
-        
+        } 
         $endTime = microtime(true);
         $tiempo = round(($endTime - $startTime) * 1000, 2);
 
@@ -377,7 +378,8 @@ class OpenaiController extends Controller
                 'respuesta' => $s3Path,
                 'tiempo' => $tiempo,
                 'pregunta_enviada' => $request->pregunta
-            ]
+            ],
+            'aws_bucket' => config('services.aws_parametros.aws_bucket')
         ]);
          
     }
