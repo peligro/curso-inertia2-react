@@ -55,6 +55,7 @@ export interface PageCustomLinkedinProps extends PageProps {
         mensaje?: string;
     };
     api_response?: PublicacionLinkedinResponse;
+    aws_bucket?:string;
     // Permitir otras propiedades dinámicas
     [key: string]: any;
 }

@@ -9,7 +9,7 @@ import MensajesFlash from "../../../js/componentes/MensajesFlash";
 
 const ClienteOficial4 = () => {
     // Obtener props de la página
-    const { errors, api_response, flash } = usePage<PageCustomLinkedinProps>().props;
+    const { errors, api_response, flash, aws_bucket } = usePage<PageCustomLinkedinProps>().props;
    
     // Estados locales
     const [publicacion, setPublicacion] = useState({
@@ -268,7 +268,7 @@ const ClienteOficial4 = () => {
                                         <div className="mb-4 text-center">
                                             <h6 className="fw-bold mb-3">Vista previa de la imagen:</h6>
                                             <img 
-                                                src={`/s3/curso-udemy/${editableFields.imagen_url}`} 
+                                                src={`/s3/${aws_bucket}/${editableFields.imagen_url}`} 
                                                 alt="Imagen generada para la publicación" 
                                                 className="img-fluid rounded"
                                                 style={{ maxWidth: '100%', height: 'auto', maxHeight: '400px' }}
