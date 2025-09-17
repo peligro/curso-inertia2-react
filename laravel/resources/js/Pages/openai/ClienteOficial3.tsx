@@ -111,7 +111,7 @@ const ClienteOficial3 = () => {
                                     <h5>Se tomó {tiempo} ms</h5>
                                     {preguntaEnviada && (
                                         <small className="text-muted">
-                                            Pregunta: "{preguntaEnviada}" | URL: {url}
+                                            Pregunta: "{preguntaEnviada}" <br/> URL: {url}
                                         </small>
                                     )}
                                 </div>
